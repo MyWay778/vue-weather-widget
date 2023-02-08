@@ -7,17 +7,8 @@ const props = defineProps<{
   type: string;
   placeholder: string;
   suggestions: string[];
+  isShowOptions: boolean;
 }>();
-
-onMounted(() => {
-  window.addEventListener('click', optionsCloseHandler);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('click', optionsCloseHandler);
-});
-
-const isShowOptions = computed(() => Boolean(props.suggestions.length));
 
 const emit = defineEmits<{
   (e: 'update:modelValue', modelValue: string): void;
@@ -28,21 +19,42 @@ const suggestionClickHandler = (suggestion: string) => {
   emit('suggestionClick', suggestion);
 };
 
-// const optionsCloseHandler = () => {
-//   isShowOptions = false;
-// };
+const isShown = ref(true);
+
+const isShow = computed(() => Boolean(isShown.value && props.suggestions.length));
+
+onMounted(() => {
+  window.addEventListener('click', windowClickHandler);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('click', windowClickHandler);
+});
+
+const windowClickHandler = () => {
+  isShown.value = false;
+};
+
+const focusInputHandler = () => {
+  console.log('focus');
+  isShown.value = true;
+};
 </script>
 
 <template>
-  <div :class="styles.container">
+  <div
+    :class="styles.container"
+    @click.stop>
     <InputUi
       :model-value="modelValue"
-      @update:modelValue="$emit('update:modelValue', $event)"
       :type="type"
       :placeholder="placeholder"
+      @click.stop
+      @update:modelValue="$emit('update:modelValue', $event)"
+      @focus="focusInputHandler"
       autocomplete="off" />
     <ul
-      v-show="isShowOptions"
+      v-show="isShow"
       :class="styles.suggestions">
       <button
         v-for="suggestion in suggestions"

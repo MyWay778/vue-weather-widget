@@ -3,37 +3,43 @@ import TitleUi from '../UI/TitleUi.vue';
 import ArrowLeftIcon from '../icons/ArrowLeftIcon.vue';
 import ButtonWIthIcon from '../UI/ButtonWIthIcon.vue';
 import InputWithSuggestions from '../UI/InputWithSuggestions.vue';
-import { ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import useCitySuggestions from '@/hooks/useCitySuggestions';
 
 const cityInput = ref('');
 const city = ref('');
 const suggestions = useCitySuggestions(city);
-let selectedOption = '';
+let selectedOption = ref('');
 let isSubmitDisabled = true;
 let message = ref('');
 
 watch(cityInput, newInput => {
-  if (newInput === selectedOption) return;
-  selectedOption = '';
+  if (newInput && newInput === selectedOption.value) return;
+  selectedOption.value = '';
   isSubmitDisabled = true;
   message.value = '';
+  suggestions.value = [];
   city.value = newInput;
 });
 
 const submitHandler = () => {
-  if (!selectedOption && cityInput.value.length) {
+  if (!selectedOption.value && cityInput.value.length) {
     message.value = 'City not found, try changing its name.';
   }
   console.log('submit');
 };
 
 const suggestionClickHandler = (suggestion: string) => {
-  selectedOption = suggestion;
+  console.log('optionSelected');
+  selectedOption.value = suggestion;
   isSubmitDisabled = false;
   cityInput.value = suggestion;
   suggestions.value = [];
 };
+
+const isShowOptions = computed(() => {
+  return Boolean(!selectedOption.value && suggestions.value.length);
+});
 </script>
 
 <template>
@@ -43,6 +49,7 @@ const suggestionClickHandler = (suggestion: string) => {
     <div :class="styles.cityName">
       <InputWithSuggestions
         v-model.trim="cityInput"
+        :is-show-options="isShowOptions"
         :class="styles.input"
         :suggestions="suggestions"
         @suggestion-click="suggestionClickHandler"
