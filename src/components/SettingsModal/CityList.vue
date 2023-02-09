@@ -6,92 +6,112 @@ import TrashIcon from '../icons/TrashIcon.vue';
 
 const props = defineProps<{ cities: CityEntity[] }>();
 
-const localCities = ref(props.cities);
+const localCities: any = ref(props.cities);
 
 const list = ref(null);
-const item = ref(null);
+const items: any = ref(null);
 const target1 = ref(null);
 
 let initialX = 0;
 let initialY = 0;
 
-let testX = 0;
-let testY = 0;
-// watch(
-//   localCities,
-//   () => {
-//     console.log('reverse!!!');
-//     initialX = testX;
-//     initialY = testY;
+let listReact = null;
 
-//     item.value[0].style.transform = `translate(${testX}px, ${testY}px)`;
-//   },
-//   {
-//     flush: 'sync'
-//   }
-// );
+let activeEl = null;
+let activeIndex = -1;
 
-let activeItem = null;
+const coords = {};
 
 onMounted(() => {
-  target1.value[1].addEventListener('dragover', event => {
-    // console.log('dragover', event.target);
-
-    const { target } = event;
-    const trg = target.getBoundingClientRect();
-    // console.log('target:', targetBound.bottom);
-
-    const source = activeItem.getBoundingClientRect();
-    // console.log('source:', sourceBound.bottom);
-
-    if (source.bottom > trg.bottom) {
-      console.log('slip');
-
-      localCities.value.reverse();
-
-      initialX = event.x;
-      initialY = event.y;
-
-      // item.value[0].style.transform = `translate(${event.x}px, ${event.y}px)`;
-      dragHandler(event);
-    }
+  localCities.value.forEach((city, index) => {
+    // city.rect = items.value[index].getBoundingClientRect();
+    city.el = items.value[index];
   });
 
-  target1.value[1].style.zIndex = '2';
+  listReact = list.value.getBoundingClientRect();
 });
 
-const dragStartHandler = (event: Event, id) => {
-  console.log('drag start', id);
-  // item.value[0].style.position = 'relative';
-  item.value[0].style.zIndex = '1';
-
-  activeItem = item.value[0];
-
-  event.target?.removeEventListener('dragover', dragOverHandler);
-
+const dragStartHandler = (event: Event, index) => {
   initialX = event.x;
   initialY = event.y;
-};
 
-const dragEndHandler = (event: Event) => {
-  item.value[0].style.position = '';
-  item.value[0].style.transform = '';
+  activeEl = localCities.value[index].el;
+  activeEl.style.zIndex = '1';
+  activeIndex = index;
 
-  initialX = 0;
-  initialY = 0;
+  window.addEventListener('mousemove', dragHandler);
 };
 
 const dragHandler = (event: Event) => {
-  console.log('dragging', event);
   const x = event.x - initialX;
   const y = event.y - initialY;
 
-  item.value[0].style.transform = `translate(${x}px, ${y}px)`;
+  activeEl.style.transform = `translate(${x}px, ${y}px)`;
+
+  const activeRect = activeEl.getBoundingClientRect();
+
+  localCities.value.forEach((targetCity, targetIndex) => {
+    if (targetCity.el === activeEl) return;
+
+    const targetRect = targetCity.el.getBoundingClientRect();
+
+    if (activeIndex < targetIndex && targetRect.top < activeRect.top && targetRect.bottom < activeRect.bottom) {
+      const localCitiesCopy = [...localCities.value];
+
+      const activeCity = localCitiesCopy[activeIndex];
+      localCitiesCopy[activeIndex] = localCitiesCopy[targetIndex];
+      localCitiesCopy[targetIndex] = activeCity;
+
+      localCities.value = localCitiesCopy;
+
+      activeIndex = targetIndex;
+
+      const activeCursorXOffset = event.x - activeRect.x;
+      const newTranslateX = event.x - targetRect.x - activeCursorXOffset;
+
+      const activeCursorYOffset = event.y - activeRect.y;
+      const newTranslateY = event.y - targetRect.y - activeCursorYOffset;
+      console.log('ACY:', activeCursorYOffset);
+      console.log('nTY:', newTranslateY);
+      initialX = event.x - newTranslateX;
+      initialY = event.y - newTranslateY;
+      activeEl.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px)`;
+    } else if (activeIndex > targetIndex && targetRect.top > activeRect.top && targetRect.bottom > activeRect.bottom) {
+      const localCitiesCopy = [...localCities.value];
+      const activeCity = localCitiesCopy[activeIndex];
+      localCitiesCopy[activeIndex] = localCitiesCopy[targetIndex];
+      localCitiesCopy[targetIndex] = activeCity;
+
+      localCities.value = localCitiesCopy;
+
+      activeIndex = targetIndex;
+
+      initialX = event.x;
+      initialY = event.y;
+      activeEl.style.transform = `translate(${0}px, ${0}px)`;
+    }
+  });
+
+  if (listReact.left > event.x || listReact.top > event.y || listReact.right < event.x || listReact.bottom < event.y) {
+    dragEndHandler(event);
+  }
+};
+
+const dragEndHandler = (event: Event) => {
+  if (!activeEl) return;
+  activeEl.style.zIndex = '';
+  activeEl.style.transform = '';
+
+  initialX = 0;
+  initialY = 0;
+
+  window.removeEventListener('mousemove', dragHandler);
+
+  activeEl = null;
 };
 
 const dragOverHandler = (event: Event) => {
-  event.stopPropagation();
-  console.log('dragOver:', event);
+  console.log('mouseEnter:', event);
 };
 </script>
 
@@ -100,25 +120,20 @@ const dragOverHandler = (event: Event) => {
     :class="styles.cityList"
     ref="list">
     <li
-      v-for="city in localCities"
+      v-for="(city, index) in localCities"
       :key="city.id"
       :class="styles.itemContainer">
       <div
         :class="styles.cityItem"
-        ref="item">
+        ref="items">
         <div
           :class="styles.hamburger"
-          @dragstart="dragStartHandler($event, city.id)"
-          @dragend="dragEndHandler"
-          @drag="dragHandler"
-          draggable="true">
+          @mousedown="dragStartHandler($event, index)"
+          @mouseup="dragEndHandler">
           <HamburgerIcon />
         </div>
-        <span>{{ city.name }}, {{ city.country }}</span>
+        <span :class="styles.cityName">{{ city.name }}, {{ city.country }}</span>
         <TrashIcon :class="styles.cityItemTrash" />
-        <div
-          ref="target1"
-          :class="styles.dragTarget"></div>
       </div>
     </li>
   </ul>
@@ -156,6 +171,10 @@ const dragOverHandler = (event: Event) => {
   justify-content: center;
   align-items: center;
   cursor: grab;
+}
+
+.cityName {
+  user-select: none;
 }
 
 .dragTarget {
