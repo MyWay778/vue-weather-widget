@@ -1,15 +1,16 @@
-import type { CityPanelProps } from '@/components/CityPanel.vue';
-import type WeatherApi from '@/typings/weatherApi';
+import type CityWeatherEntity from '@/typings/CityWeatherEntity';
+import type WeatherApi from '@/typings/WeatherApi';
 import capitalizeFirstLetter from './capitalizeFirstLetter';
 import changeNumberPrecision from './changeNumberPrecision';
 import convertMetersToKm from './convertMetersToKm';
 import getIconUrl from './getIconUrl';
 import getWindDirection from './getWindDirection';
 
-export default function getCityPanelProps(weatherData: WeatherApi): CityPanelProps {
+export default function normalizeWeatherApi(weatherData: WeatherApi): CityWeatherEntity {
   return {
     id: weatherData.sys.id,
-    title: `${weatherData.name}, ${weatherData.sys.country}`,
+    name: weatherData.name,
+    country: weatherData.sys.country,
     iconUrl: getIconUrl(weatherData.weather[0].icon),
     main: weatherData.weather[0].main,
     temp: Math.round(weatherData.main.temp),

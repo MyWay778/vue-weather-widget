@@ -4,6 +4,7 @@ import ButtonWIthIcon from './UI/ButtonWIthIcon.vue';
 import TitleUi from './UI/TitleUi.vue';
 import CityList from './SettingsModal/CityList.vue';
 import AddCityForm from './SettingsModal/AddCityForm.vue';
+import type CityEntity from '@/typings/CityEntity';
 
 export interface SettingsProps {
   cities: City[];
@@ -16,7 +17,7 @@ export interface City {
 }
 
 defineProps<{
-  cities: [];
+  cities: CityEntity[];
 }>();
 </script>
 

@@ -2,29 +2,31 @@
 import SettingsIcon from './components/icons/SettingIcon.vue';
 import SunIcon from './components/icons/SunIcon.vue';
 import ButtonWIthIcon from './components/UI/ButtonWIthIcon.vue';
-import CityPanel, { type CityPanelProps } from './components/CityPanel.vue';
+import CityPanel from './components/CityPanel.vue';
 import ModalUi from './components/UI/ModalUi.vue';
 import SettingsModal from './components/SettingsModal.vue';
-import { computed, onBeforeMount, reactive, ref, unref, watchEffect, type Ref } from 'vue';
-import type WeatherApi from './typings/weatherApi';
-import type { geocodingApi } from './typings/geocodingApi';
-import getCityPanelProps from './helpers/getCItyPanelProps';
+import { computed, reactive, ref, unref, type ComputedRef, type Ref } from 'vue';
+import type WeatherApi from './typings/WeatherApi';
 import useFeatchWeather from './hooks/useFetchWeather';
-import type { CityEntity } from './typings/cityEntity';
+import type CityEntity from './typings/CityEntity';
+import type CityWeatherEntity from './typings/CityWeatherEntity';
+import normalizeWeatherApi from './helpers/normalizeWeatherApi';
 
 const cities: CityEntity[] = [
-  // {
-  //   name: 'Chita',
-  //   country: 'RU',
-  //   lat: 51.5085,
-  //   lon: -0.1257
-  // },
-  // {
-  //   name: 'London',
-  //   country: 'GB',
-  //   lat: 51.5085,
-  //   lon: -0.1257
-  // },
+  {
+    id: 2004688,
+    name: 'Chita',
+    country: 'RU',
+    lat: 51.5085,
+    lon: -0.1257
+  },
+  {
+    id: 20046321,
+    name: 'London',
+    country: 'GB',
+    lat: 51.5085,
+    lon: -0.1257
+  }
   // {
   //   name: 'Moscow',
   //   country: 'Ru',
@@ -33,39 +35,26 @@ const cities: CityEntity[] = [
   // }
 ];
 
-const citiesData: { data: Ref<WeatherApi | null>; isLoading: Ref<boolean> }[] = reactive([]);
+const cityWeatherData: { data: Ref<WeatherApi | null>; isLoading: Ref<boolean> }[] = reactive([]);
 
 cities.forEach(city => {
-  citiesData.push(useFeatchWeather(city));
+  cityWeatherData.push(useFeatchWeather(city));
 });
 
-const isLoading = computed(() => citiesData.some(data => data.isLoading));
-// const cityPanelProps = [];
-// const cityPanelProps = computed(() => {
-//   console.log('computed');
-//   return citiesData.filter(city => city.data).map(city => getCityPanelProps(city.data as any));
-// });
+const isLoading = computed(() => cityWeatherData.some(data => data.isLoading));
 
-const cityPanelProps = computed(() =>
-  citiesData.reduce((panelProps, city) => {
+const cityWeatherEntities: ComputedRef<CityWeatherEntity[]> = computed(() =>
+  cityWeatherData.reduce((cityWeatherEntities, city) => {
     const data = unref(city.data);
     if (data) {
-      panelProps.push(getCityPanelProps(data));
+      cityWeatherEntities.push(normalizeWeatherApi(data));
     }
-    return panelProps;
-  }, [] as CityPanelProps[])
+    return cityWeatherEntities;
+  }, [] as CityWeatherEntity[])
 );
-
-const countryApi: geocodingApi = {
-  name: 'London',
-  lat: 51.5085,
-  lon: -0.1257,
-  country: 'GB'
-};
 
 const isSettingsOpened = ref(false);
 const clickOnSettingsHandler = () => {
-  console.log('click');
   isSettingsOpened.value = true;
 };
 </script>
@@ -84,31 +73,21 @@ const clickOnSettingsHandler = () => {
       <SunIcon :class="styles.loaderIcon" />
     </div>
 
-    <div :class="styles.message">
+    <div
+      v-if="!cities.length"
+      :class="styles.message">
       No city has been selected. Click on <SettingsIcon :class="styles.messageIcon" /> to add a city!
     </div>
 
     <CityPanel
-      v-for="props in cityPanelProps"
-      :key="props.title"
-      :title="props.title"
-      :iconUrl="props.iconUrl"
-      :main="props.main"
-      :temp="props.temp"
-      :feels-like="props.feelsLike"
-      :description="props.description"
-      :wind-speed="props.windSpeed"
-      :wind-deg="props.windDeg"
-      :wind-dir="props.windDir"
-      :pressure="props.pressure"
-      :humidity="props.humidity"
-      :sea-level="props.seaLevel"
-      :visibility="props.visibility" />
+      v-for="entity in cityWeatherEntities"
+      :key="entity.id"
+      :data="entity" />
 
     <ModalUi
       v-if="isSettingsOpened"
       @closeModal="isSettingsOpened = false">
-      <SettingsModal :cities="[]" />
+      <SettingsModal :cities="cities" />
     </ModalUi>
   </div>
 </template>

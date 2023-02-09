@@ -1,79 +1,68 @@
 <script setup lang="ts">
+import type CityWeatherEntity from '@/typings/CityWeatherEntity';
 import CelsiusUnitValue from './CelsiusUnitValue.vue';
 import CompassIcon from './icons/CompassIcon.vue';
 import TitleUi from './UI/TitleUi.vue';
 import WindArrow from './WindArrow.vue';
 
-export interface CityPanelProps {
-  id?: number;
-  title: string;
-  iconUrl: string;
-  main: string;
-  temp: number;
-  feelsLike: number;
-  description: string;
-  windSpeed: number;
-  windDeg: number;
-  windDir: string;
-  humidity: number;
-  pressure: number;
-  seaLevel?: number;
-  visibility: number;
+interface CityPanelProps {
+  data: CityWeatherEntity;
 }
 
-defineProps<CityPanelProps>();
+// eslint-disable-next-line vue/no-setup-props-destructure
+const { data } = defineProps<CityPanelProps>();
 </script>
 
 <template>
   <section>
     <div :class="styles.header">
-      <TitleUi>
-        {{ title }}
-      </TitleUi>
+      <TitleUi>{{ data.name }}, {{ data.country }}</TitleUi>
     </div>
 
     <div :class="styles.tempBlock">
       <div :class="styles.image">
         <img
-          :src="iconUrl"
-          :atl="main" />
+          :src="data.iconUrl"
+          :atl="data.main" />
       </div>
       <div :class="styles.value">
-        <span>{{ temp }}</span>
+        <span>{{ data.temp }}</span>
         <sup :class="styles.units">o</sup>
         <span>C</span>
       </div>
     </div>
 
     <div :class="styles.infoBlock">
-      <div :class="styles.description">Feels like <CelsiusUnitValue :value="feelsLike" />. {{ description }}.</div>
+      <div :class="styles.description">
+        Feels like <CelsiusUnitValue :value="data.feelsLike" />. {{ data.description }}.
+      </div>
 
       <div :class="styles.entries">
         <div :class="[styles.entry, styles.entry_withIcon]">
-          <WindArrow :deg="windDeg" />
-          <span> {{ windSpeed }}m/s {{ windDir }}</span>
+          <WindArrow :deg="data.windDeg" />
+          <span> {{ data.windSpeed }}m/s {{ data.windDir }}</span>
         </div>
 
         <div :class="[styles.entry, styles.entry_withIcon]">
           <CompassIcon />
-          <span> {{ pressure }}hPa</span>
+          <span> {{ data.pressure }}hPa</span>
         </div>
 
         <div :class="styles.entry">
           <span :class="styles.entryTitle">Humidity: </span>
-          <span>{{ humidity }}%</span>
+          <span>{{ data.humidity }}%</span>
         </div>
 
         <div
-          v-if="seaLevel"
+          v-if="data.seaLevel"
           :class="styles.entry">
           <span :class="styles.entryTitle">Sea level: </span>
-          <span>{{ seaLevel }}km</span>
+          <span>{{ data.seaLevel }}km</span>
         </div>
 
         <div :class="styles.entry">
           <span :class="styles.entryTitle">Visibility: </span>
-          <span>{{ visibility }}km</span>
+          <span>{{ data.visibility }}km</span>
         </div>
       </div>
     </div>
@@ -139,12 +128,5 @@ defineProps<CityPanelProps>();
   .entryTitle {
     font-weight: 600;
   }
-}
-
-.celsius {
-  vertical-align: middle;
-  position: relative;
-  top: -0.8em;
-  font-size: 0.6em;
 }
 </style>

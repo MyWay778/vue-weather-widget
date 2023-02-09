@@ -1,5 +1,5 @@
-import type { CityEntity } from '@/typings/cityEntity';
-import type WeatherApi from '@/typings/weatherApi';
+import type CityEntity from '@/typings/CityEntity';
+import type WeatherApi from '@/typings/WeatherApi';
 import { ref, type Ref } from 'vue';
 
 const API_URL = 'http://api.openweathermap.org/data/2.5/weather';
