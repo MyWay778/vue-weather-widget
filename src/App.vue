@@ -26,13 +26,14 @@ const cities: CityEntity[] = [
     country: 'GB',
     lat: 51.5085,
     lon: -0.1257
+  },
+  {
+    id: 3213213,
+    name: 'Moscow',
+    country: 'Ru',
+    lat: 51.5085,
+    lon: -0.1257
   }
-  // {
-  //   name: 'Moscow',
-  //   country: 'Ru',
-  //   lat: 51.5085,
-  //   lon: -0.1257
-  // }
 ];
 
 const cityWeatherData: { data: Ref<WeatherApi | null>; isLoading: Ref<boolean> }[] = reactive([]);

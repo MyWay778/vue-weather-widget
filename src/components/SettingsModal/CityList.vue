@@ -1,117 +1,136 @@
 <script setup lang="ts">
+import setElementTransform from '@/helpers/setElementTransform';
+import swapArrayItems from '@/helpers/swapArrayItems';
 import type CityEntity from '@/typings/CityEntity';
-import { nextTick, onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch, type Ref } from 'vue';
 import HamburgerIcon from '../icons/HamburgerIcon.vue';
 import TrashIcon from '../icons/TrashIcon.vue';
 
 const props = defineProps<{ cities: CityEntity[] }>();
+const localCities = ref(props.cities);
 
-const localCities: any = ref(props.cities);
+const list = ref<HTMLElement>();
+let listReact: DOMRect | null = null;
+onMounted(() => {
+  if (list.value) {
+    listReact = list.value.getBoundingClientRect();
+  }
+});
 
-const list = ref(null);
-const items: any = ref(null);
-const target1 = ref(null);
+const TRANSFORM_SCALE = 1.03;
+const items = ref<HTMLElement[]>([]);
 
 let initialX = 0;
 let initialY = 0;
+let activeEl: HTMLElement | null = null;
+let activeIndex = ref(-1);
 
-let listReact = null;
-
-let activeEl = null;
-let activeIndex = -1;
-
-const coords = {};
-
-onMounted(() => {
-  localCities.value.forEach((city, index) => {
-    // city.rect = items.value[index].getBoundingClientRect();
-    city.el = items.value[index];
-  });
-
-  listReact = list.value.getBoundingClientRect();
-});
-
-const dragStartHandler = (event: Event, index) => {
+const dragStartHandler = (event: MouseEvent, index: number) => {
+  if (!items.value) return;
   initialX = event.x;
   initialY = event.y;
 
-  activeEl = localCities.value[index].el;
-  activeEl.style.zIndex = '1';
-  activeIndex = index;
+  activeEl = items.value[index];
+  activeIndex.value = index;
+
+  setElementTransform(activeEl, { scale: TRANSFORM_SCALE });
 
   window.addEventListener('mousemove', dragHandler);
 };
 
-const dragHandler = (event: Event) => {
+const dragHandler = (event: MouseEvent) => {
+  if (!activeEl || !items.value) return;
+
   const x = event.x - initialX;
   const y = event.y - initialY;
 
-  activeEl.style.transform = `translate(${x}px, ${y}px)`;
+  setElementTransform(activeEl, { x, y, scale: TRANSFORM_SCALE });
 
   const activeRect = activeEl.getBoundingClientRect();
 
-  localCities.value.forEach((targetCity, targetIndex) => {
-    if (targetCity.el === activeEl) return;
+  items.value.forEach((target, targetIndex) => {
+    if (target === activeEl) return;
 
-    const targetRect = targetCity.el.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
 
-    if (activeIndex < targetIndex && targetRect.top < activeRect.top && targetRect.bottom < activeRect.bottom) {
-      const localCitiesCopy = [...localCities.value];
+    if (activeBelowTarget() || activeAboveTarget()) {
+      swapActiveAndTarget();
+    }
 
-      const activeCity = localCitiesCopy[activeIndex];
-      localCitiesCopy[activeIndex] = localCitiesCopy[targetIndex];
-      localCitiesCopy[targetIndex] = activeCity;
+    function activeBelowTarget(): boolean {
+      return (
+        // eslint-disable-next-line prettier/prettier
+        activeIndex.value < targetIndex &&
+        targetRect.top < activeRect.top &&
+        targetRect.bottom < activeRect.bottom
+      );
+    }
 
-      localCities.value = localCitiesCopy;
+    function activeAboveTarget(): boolean {
+      return (
+        // eslint-disable-next-line prettier/prettier
+        activeIndex.value > targetIndex && 
+        targetRect.top > activeRect.top && 
+        targetRect.bottom > activeRect.bottom
+      );
+    }
 
-      activeIndex = targetIndex;
+    function swapActiveAndTarget(): void {
+      localCities.value = swapArrayItems(localCities.value, activeIndex.value, targetIndex);
+      items.value = swapArrayItems(items.value, activeIndex.value, targetIndex);
 
-      const activeCursorXOffset = event.x - activeRect.x;
-      const newTranslateX = event.x - targetRect.x - activeCursorXOffset;
+      activeIndex.value = targetIndex;
 
-      const activeCursorYOffset = event.y - activeRect.y;
-      const newTranslateY = event.y - targetRect.y - activeCursorYOffset;
-      console.log('ACY:', activeCursorYOffset);
-      console.log('nTY:', newTranslateY);
-      initialX = event.x - newTranslateX;
-      initialY = event.y - newTranslateY;
-      activeEl.style.transform = `translate(${newTranslateX}px, ${newTranslateY}px)`;
-    } else if (activeIndex > targetIndex && targetRect.top > activeRect.top && targetRect.bottom > activeRect.bottom) {
-      const localCitiesCopy = [...localCities.value];
-      const activeCity = localCitiesCopy[activeIndex];
-      localCitiesCopy[activeIndex] = localCitiesCopy[targetIndex];
-      localCitiesCopy[targetIndex] = activeCity;
+      updateActivePos();
+    }
 
-      localCities.value = localCitiesCopy;
+    function updateActivePos(): void {
+      if (!activeEl) return;
 
-      activeIndex = targetIndex;
+      const scaleXDiff = getScaleDiff(activeRect.width);
+      const actualX = activeRect.x - targetRect.x + scaleXDiff;
+      initialX = event.x - actualX;
 
-      initialX = event.x;
-      initialY = event.y;
-      activeEl.style.transform = `translate(${0}px, ${0}px)`;
+      const scaleYDiff = getScaleDiff(activeRect.height);
+      const actualY = activeRect.y - targetRect.y + scaleYDiff;
+      initialY = event.y - actualY;
+
+      setElementTransform(activeEl, { x: actualX, y: actualY, scale: TRANSFORM_SCALE });
+    }
+
+    function getScaleDiff(size: number): number {
+      const RECTANGLE_SIDES = 2;
+      return (size - size / TRANSFORM_SCALE) / RECTANGLE_SIDES;
     }
   });
 
-  if (listReact.left > event.x || listReact.top > event.y || listReact.right < event.x || listReact.bottom < event.y) {
-    dragEndHandler(event);
+  if (activeIsOutOfBounds()) {
+    dragEndHandler();
+  }
+
+  function activeIsOutOfBounds(): boolean {
+    if (!listReact) return false;
+
+    return (
+      // eslint-disable-next-line prettier/prettier
+      listReact.left > activeRect.right || 
+      listReact.top > activeRect.bottom ||
+      listReact.right < activeRect.left ||
+      listReact.bottom < activeRect.top
+    );
   }
 };
 
-const dragEndHandler = (event: Event) => {
+const dragEndHandler = () => {
   if (!activeEl) return;
-  activeEl.style.zIndex = '';
-  activeEl.style.transform = '';
 
+  activeEl.style.transform = '';
   initialX = 0;
   initialY = 0;
+  activeEl = null;
+  activeIndex.value = -1;
 
   window.removeEventListener('mousemove', dragHandler);
-
-  activeEl = null;
-};
-
-const dragOverHandler = (event: Event) => {
-  console.log('mouseEnter:', event);
 };
 </script>
 
@@ -124,12 +143,12 @@ const dragOverHandler = (event: Event) => {
       :key="city.id"
       :class="styles.itemContainer">
       <div
-        :class="styles.cityItem"
+        :class="[styles.cityItem, { [styles.draggable]: activeIndex === index }]"
+        @mouseup="dragEndHandler"
         ref="items">
         <div
           :class="styles.hamburger"
-          @mousedown="dragStartHandler($event, index)"
-          @mouseup="dragEndHandler">
+          @mousedown="dragStartHandler($event, index)">
           <HamburgerIcon />
         </div>
         <span :class="styles.cityName">{{ city.name }}, {{ city.country }}</span>
@@ -163,6 +182,16 @@ const dragOverHandler = (event: Event) => {
 
   &Trash {
     margin-left: auto;
+  }
+
+  &.draggable {
+    z-index: 1;
+    box-shadow: 2px 2px 4px 1px var(--shadow);
+    cursor: grabbing;
+
+    .hamburger {
+      cursor: inherit;
+    }
   }
 }
 
