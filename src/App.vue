@@ -4,7 +4,7 @@ import SunIcon from './components/icons/SunIcon.vue';
 import ButtonWIthIcon from './components/UI/ButtonWIthIcon.vue';
 import CityPanel from './components/CityPanel.vue';
 import ModalUi from './components/UI/ModalUi.vue';
-import SettingsModal from './components/SettingsModal.vue';
+import SettingsModal from './components/SettingsModal/SettingsModal.vue';
 import { computed, reactive, ref, unref, type ComputedRef, type Ref } from 'vue';
 import type WeatherApi from './typings/WeatherApi';
 import useFeatchWeather from './hooks/useFetchWeather';
@@ -13,22 +13,22 @@ import type CityWeatherEntity from './typings/CityWeatherEntity';
 import normalizeWeatherApi from './helpers/normalizeWeatherApi';
 
 const cities = ref<CityEntity[]>([
+  // {
+  //   id: 8890,
+  //   name: 'Chita',
+  //   country: 'RU',
+  //   lat: 51.5085,
+  //   lon: -0.1257
+  // },
   {
-    id: 2004688,
-    name: 'Chita',
-    country: 'RU',
-    lat: 51.5085,
-    lon: -0.1257
-  },
-  {
-    id: 20046321,
+    id: 2075535,
     name: 'London',
     country: 'GB',
     lat: 51.5085,
     lon: -0.1257
   },
   {
-    id: 3213213,
+    id: 2018597,
     name: 'Moscow',
     country: 'Ru',
     lat: 51.5085,
@@ -40,13 +40,8 @@ const cityWeatherData = computed(() => {
   return cities.value.map(useFeatchWeather);
 });
 
-// cities.value.forEach(city => {
-//   cityWeatherData.push(useFeatchWeather(city));
-// });
-
 // const isLoading = computed(() => cityWeatherData.value.some(data => data.isLoading));
 const isLoading = false;
-
 
 const cityWeatherEntities: ComputedRef<CityWeatherEntity[]> = computed(() =>
   cityWeatherData.value.reduce((cityWeatherEntities, city) => {
@@ -64,8 +59,15 @@ const clickOnSettingsHandler = () => {
 };
 
 const reorderCitiesHandler = (updatedCities: CityEntity[]) => {
-  // console.log('cities:', cities);
   cities.value = updatedCities;
+};
+
+const onRemoveCity = (cityId: number) => {
+  cities.value = cities.value.filter(city => city.id !== cityId);
+};
+
+const onAddCity = (city: CityEntity): void => {
+  cities.value.push(city);
 };
 </script>
 
@@ -99,7 +101,9 @@ const reorderCitiesHandler = (updatedCities: CityEntity[]) => {
       @closeModal="isSettingsOpened = false">
       <SettingsModal
         :cities="cities"
-        @reorderCities="reorderCitiesHandler" />
+        @reorderCities="reorderCitiesHandler"
+        @remove-city="onRemoveCity"
+        @add-city="onAddCity"/>
     </ModalUi>
   </div>
 </template>

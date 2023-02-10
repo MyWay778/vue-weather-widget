@@ -2,20 +2,30 @@
 import setElementTransform from '@/helpers/setElementTransform';
 import swapArrayItems from '@/helpers/swapArrayItems';
 import type CityEntity from '@/typings/CityEntity';
-import { onMounted, ref } from 'vue';
-import HamburgerIcon from '../icons/HamburgerIcon.vue';
-import TrashIcon from '../icons/TrashIcon.vue';
+import { computed, onMounted, ref, watch, watchEffect } from 'vue';
+import HamburgerIcon from '@/components/icons/HamburgerIcon.vue';
+import TrashIcon from '../../icons/TrashIcon.vue';
+import ButtonWIthIcon from '../../UI/ButtonWIthIcon.vue';
 
 const props = defineProps<{ cities: CityEntity[] }>();
-const localCities = ref(props.cities);
+const emit = defineEmits<{
+  (event: 'reorderCities', updatedCities: CityEntity[]): void;
+  (event: 'removeCity', cityId: number): void;
+}>();
+
+const localCities = ref<CityEntity[]>(props.cities);
+
+watchEffect(() => {
+  localCities.value = props.cities;
+});
 
 const list = ref<HTMLElement>();
 let listReact: DOMRect | null = null;
-onMounted(() => {
-  if (list.value) {
-    listReact = list.value.getBoundingClientRect();
-  }
-});
+// onMounted(() => {
+//   if (list.value) {
+//     listReact = list.value.getBoundingClientRect();
+//   }
+// });
 
 const TRANSFORM_SCALE = 1.03;
 const items = ref<HTMLElement[]>([]);
@@ -32,6 +42,10 @@ const dragStartHandler = (event: MouseEvent, index: number) => {
 
   activeEl = items.value[index];
   activeIndex.value = index;
+
+  if (list.value) {
+    listReact = list.value.getBoundingClientRect();
+  }
 
   setElementTransform(activeEl, { scale: TRANSFORM_SCALE });
 
@@ -121,10 +135,6 @@ const dragHandler = (event: MouseEvent) => {
   }
 };
 
-const emit = defineEmits<{
-  (event: 'reorderCities', updatedCities: CityEntity[]): void;
-}>();
-
 const dragEndHandler = () => {
   if (!activeEl) return;
 
@@ -136,6 +146,10 @@ const dragEndHandler = () => {
 
   window.removeEventListener('mousemove', dragHandler);
   emit('reorderCities', localCities.value);
+};
+
+const onRemoveCity = (cityId: number): void => {
+  emit('removeCity', cityId);
 };
 </script>
 
@@ -157,7 +171,9 @@ const dragEndHandler = () => {
           <HamburgerIcon />
         </div>
         <span :class="styles.cityName">{{ city.name }}, {{ city.country }}</span>
-        <TrashIcon :class="styles.cityItemTrash" />
+        <ButtonWIthIcon :class="styles.cityItemTrash" @click="onRemoveCity(city.id)">
+          <TrashIcon />
+        </ButtonWIthIcon>
       </div>
     </li>
   </ul>
@@ -209,14 +225,5 @@ const dragEndHandler = () => {
 
 .cityName {
   user-select: none;
-}
-
-.dragTarget {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: -1;
-  width: 100%;
-  height: 100%;
 }
 </style>

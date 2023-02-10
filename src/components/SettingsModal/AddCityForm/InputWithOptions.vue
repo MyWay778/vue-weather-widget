@@ -1,42 +1,41 @@
 <script setup lang="ts">
+import type CityEntity from '@/typings/CityEntity';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import InputUi from './InputUi.vue';
+import InputUi from '../../UI/InputUi.vue';
 
 const props = defineProps<{
   modelValue: string;
   type: string;
   placeholder: string;
-  suggestions: string[];
+  options: CityEntity[];
   isShowOptions: boolean;
 }>();
 
 const emit = defineEmits<{
   (e: 'update:modelValue', modelValue: string): void;
-  (e: 'suggestionClick', value: string): void;
+  (e: 'optionClick', value: CityEntity): void;
 }>();
 
-const suggestionClickHandler = (suggestion: string) => {
-  emit('suggestionClick', suggestion);
-};
-
-const isShown = ref(true);
-
-const isShow = computed(() => Boolean(isShown.value && props.suggestions.length));
-
 onMounted(() => {
-  window.addEventListener('click', windowClickHandler);
+  window.addEventListener('click', onWindowClick);
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener('click', windowClickHandler);
+  window.removeEventListener('click', onWindowClick);
 });
 
-const windowClickHandler = () => {
+const isShown = ref(true);
+const isShow = computed(() => Boolean(isShown.value && props.options.length));
+
+const onOptionClick = (option: CityEntity) => {
+  emit('optionClick', option);
+};
+
+const onWindowClick = () => {
   isShown.value = false;
 };
 
-const focusInputHandler = () => {
-  console.log('focus');
+const onInputFocus = () => {
   isShown.value = true;
 };
 </script>
@@ -51,19 +50,19 @@ const focusInputHandler = () => {
       :placeholder="placeholder"
       @click.stop
       @update:modelValue="$emit('update:modelValue', $event)"
-      @focus="focusInputHandler"
+      @focus="onInputFocus"
       autocomplete="off" />
     <ul
       v-show="isShow"
       :class="styles.suggestions">
       <button
-        v-for="suggestion in suggestions"
-        :key="suggestion"
+        v-for="option in options"
+        :key="option.id"
         :class="styles.button"
-        @click="suggestionClickHandler(suggestion)"
+        @click="onOptionClick(option)"
         class="button"
         type="button">
-        {{ suggestion }}
+        {{ option.name }}, {{ option.country }}
       </button>
     </ul>
   </div>
