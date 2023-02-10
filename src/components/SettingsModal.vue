@@ -19,12 +19,18 @@ export interface City {
 defineProps<{
   cities: CityEntity[];
 }>();
+
+defineEmits<{
+  (event: 'reorderCities', cities: CityEntity[]): void;
+}>();
 </script>
 
 <template>
   <TitleUi>Settings</TitleUi>
 
-  <CityList :cities="cities" />
+  <CityList
+    :cities="cities"
+    @reorder-cities="$emit('reorderCities', $event)" />
 
   <AddCityForm />
 </template>

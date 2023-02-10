@@ -2,7 +2,7 @@
 import setElementTransform from '@/helpers/setElementTransform';
 import swapArrayItems from '@/helpers/swapArrayItems';
 import type CityEntity from '@/typings/CityEntity';
-import { nextTick, onMounted, ref, watch, type Ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import HamburgerIcon from '../icons/HamburgerIcon.vue';
 import TrashIcon from '../icons/TrashIcon.vue';
 
@@ -121,6 +121,10 @@ const dragHandler = (event: MouseEvent) => {
   }
 };
 
+const emit = defineEmits<{
+  (event: 'reorderCities', updatedCities: CityEntity[]): void;
+}>();
+
 const dragEndHandler = () => {
   if (!activeEl) return;
 
@@ -131,6 +135,7 @@ const dragEndHandler = () => {
   activeIndex.value = -1;
 
   window.removeEventListener('mousemove', dragHandler);
+  emit('reorderCities', localCities.value);
 };
 </script>
 

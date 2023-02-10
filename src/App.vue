@@ -12,7 +12,7 @@ import type CityEntity from './typings/CityEntity';
 import type CityWeatherEntity from './typings/CityWeatherEntity';
 import normalizeWeatherApi from './helpers/normalizeWeatherApi';
 
-const cities: CityEntity[] = [
+const cities = ref<CityEntity[]>([
   {
     id: 2004688,
     name: 'Chita',
@@ -34,18 +34,22 @@ const cities: CityEntity[] = [
     lat: 51.5085,
     lon: -0.1257
   }
-];
+]);
 
-const cityWeatherData: { data: Ref<WeatherApi | null>; isLoading: Ref<boolean> }[] = reactive([]);
-
-cities.forEach(city => {
-  cityWeatherData.push(useFeatchWeather(city));
+const cityWeatherData = computed(() => {
+  return cities.value.map(useFeatchWeather);
 });
 
-const isLoading = computed(() => cityWeatherData.some(data => data.isLoading));
+// cities.value.forEach(city => {
+//   cityWeatherData.push(useFeatchWeather(city));
+// });
+
+// const isLoading = computed(() => cityWeatherData.value.some(data => data.isLoading));
+const isLoading = false;
+
 
 const cityWeatherEntities: ComputedRef<CityWeatherEntity[]> = computed(() =>
-  cityWeatherData.reduce((cityWeatherEntities, city) => {
+  cityWeatherData.value.reduce((cityWeatherEntities, city) => {
     const data = unref(city.data);
     if (data) {
       cityWeatherEntities.push(normalizeWeatherApi(data));
@@ -57,6 +61,11 @@ const cityWeatherEntities: ComputedRef<CityWeatherEntity[]> = computed(() =>
 const isSettingsOpened = ref(false);
 const clickOnSettingsHandler = () => {
   isSettingsOpened.value = true;
+};
+
+const reorderCitiesHandler = (updatedCities: CityEntity[]) => {
+  // console.log('cities:', cities);
+  cities.value = updatedCities;
 };
 </script>
 
@@ -88,7 +97,9 @@ const clickOnSettingsHandler = () => {
     <ModalUi
       v-if="isSettingsOpened"
       @closeModal="isSettingsOpened = false">
-      <SettingsModal :cities="cities" />
+      <SettingsModal
+        :cities="cities"
+        @reorderCities="reorderCitiesHandler" />
     </ModalUi>
   </div>
 </template>
