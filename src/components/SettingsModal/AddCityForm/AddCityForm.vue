@@ -11,6 +11,7 @@ const emit = defineEmits<{
   (event: 'addCity', city: CityEntity): void;
 }>();
 
+const inputEl = ref<{ refs: { inputEl: HTMLInputElement } }>();
 const cityInput = ref('');
 const cityRequest = ref('');
 const options = useFetchCityOptions(cityRequest);
@@ -20,6 +21,8 @@ let message = ref('');
 let isSubmitDisabled = computed(() => !selectedOption.value);
 
 watch(cityInput, () => {
+  message.value = '';
+
   if (isOptionSelected) {
     isOptionSelected = false;
     return;
@@ -30,14 +33,18 @@ watch(cityInput, () => {
   cityRequest.value = cityInput.value;
 });
 
-const submitHandler = (): void => {
-  if (!selectedOption.value && !options.value.length) {
-    message.value = 'City not found, try changing its name.';
-    return;
-  }
+const submitHandler = (event: Event): void => {
+  event.stopPropagation();
 
-  if (selectedOption.value) {
+  if (!selectedOption.value) {
+    if (!options.value.length) {
+      message.value = 'City not found, try changing its name.';
+    }
+
+    inputEl.value?.refs.inputEl.focus();
+  } else {
     emit('addCity', selectedOption.value);
+    cityInput.value = '';
   }
 };
 
@@ -64,6 +71,7 @@ const isShowOptions = computed(() => {
         :class="styles.input"
         :options="options"
         @option-click="onOptionClick"
+        ref="inputEl"
         type="search"
         placeholder="Enter city..." />
 

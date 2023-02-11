@@ -20,7 +20,7 @@ defineProps<{
 
 const emit = defineEmits<{
   (event: 'reorderCities', cities: CityEntity[]): void;
-  (event: 'removeCity', cityId: number): void;
+  (event: 'removeCity', cityId: string): void;
   (event: 'addCity', city: CityEntity): void
 }>();
 
@@ -37,7 +37,7 @@ const onAddCity = (city: CityEntity): void => {
     @reorder-cities="$emit('reorderCities', $event)"
     @remove-city="$emit('removeCity', $event)" />
 
-  <AddCityForm @add-city="onAddCity"/>
+  <AddCityForm @add-city="onAddCity" />
 </template>
 
 <style module="styles" lang="scss"></style>

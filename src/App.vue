@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import SettingsIcon from './components/icons/SettingIcon.vue';
-import SunIcon from './components/icons/SunIcon.vue';
 import ButtonWIthIcon from './components/UI/ButtonWIthIcon.vue';
 import CityPanel from './components/CityPanel.vue';
 import ModalUi from './components/UI/ModalUi.vue';
 import SettingsModal from './components/SettingsModal/SettingsModal.vue';
-import { computed, reactive, ref, unref, type ComputedRef, type Ref } from 'vue';
-import type WeatherApi from './typings/WeatherApi';
-import useFeatchWeather from './hooks/useFetchWeather';
+import { ref } from 'vue';
 import type CityEntity from './typings/CityEntity';
-import type CityWeatherEntity from './typings/CityWeatherEntity';
-import normalizeWeatherApi from './helpers/normalizeWeatherApi';
 
 const cities = ref<CityEntity[]>([
   // {
@@ -21,37 +16,20 @@ const cities = ref<CityEntity[]>([
   //   lon: -0.1257
   // },
   {
-    id: 2075535,
+    id: '2075535',
     name: 'London',
     country: 'GB',
     lat: 51.5085,
     lon: -0.1257
   },
   {
-    id: 2018597,
+    id: '2018597',
     name: 'Moscow',
     country: 'Ru',
     lat: 51.5085,
     lon: -0.1257
   }
 ]);
-
-const cityWeatherData = computed(() => {
-  return cities.value.map(useFeatchWeather);
-});
-
-// const isLoading = computed(() => cityWeatherData.value.some(data => data.isLoading));
-const isLoading = false;
-
-const cityWeatherEntities: ComputedRef<CityWeatherEntity[]> = computed(() =>
-  cityWeatherData.value.reduce((cityWeatherEntities, city) => {
-    const data = unref(city.data);
-    if (data) {
-      cityWeatherEntities.push(normalizeWeatherApi(data));
-    }
-    return cityWeatherEntities;
-  }, [] as CityWeatherEntity[])
-);
 
 const isSettingsOpened = ref(false);
 const clickOnSettingsHandler = () => {
@@ -62,7 +40,7 @@ const reorderCitiesHandler = (updatedCities: CityEntity[]) => {
   cities.value = updatedCities;
 };
 
-const onRemoveCity = (cityId: number) => {
+const onRemoveCity = (cityId: string) => {
   cities.value = cities.value.filter(city => city.id !== cityId);
 };
 
@@ -80,21 +58,15 @@ const onAddCity = (city: CityEntity): void => {
     </ButtonWIthIcon>
 
     <div
-      v-if="isLoading"
-      :class="styles.loader">
-      <SunIcon :class="styles.loaderIcon" />
-    </div>
-
-    <div
       v-if="!cities.length"
       :class="styles.message">
-      No city has been selected. Click on <SettingsIcon :class="styles.messageIcon" /> to add a city!
+      Click on <SettingsIcon :class="styles.messageIcon" /> to add a city!
     </div>
 
     <CityPanel
-      v-for="entity in cityWeatherEntities"
-      :key="entity.id"
-      :data="entity" />
+      v-for="city in cities"
+      :key="city.id"
+      :city="city" />
 
     <ModalUi
       v-if="isSettingsOpened"
@@ -103,7 +75,7 @@ const onAddCity = (city: CityEntity): void => {
         :cities="cities"
         @reorderCities="reorderCitiesHandler"
         @remove-city="onRemoveCity"
-        @add-city="onAddCity"/>
+        @add-city="onAddCity" />
     </ModalUi>
   </div>
 </template>
@@ -128,6 +100,7 @@ const onAddCity = (city: CityEntity): void => {
   position: absolute;
   top: 20px;
   right: 20px;
+  z-index: 1;
 
   &:hover {
     svg {
@@ -140,31 +113,13 @@ const onAddCity = (city: CityEntity): void => {
   }
 }
 
-.loader {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-
-  &Icon {
-    width: 60px;
-    height: 60px;
-
-    :global {
-      animation: rotation 2s linear infinite;
-    }
-  }
-}
-
 .message {
   position: absolute;
   top: 50%;
+  left: 50%;
   text-align: center;
   font-size: 18px;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
 
   &Icon {
     width: 18px;

@@ -40,7 +40,13 @@ export default function useFetchCityOptions(cityRequest: Ref<string>, delay = 10
         .then(response => response.json() as Promise<CityApi>)
         .then(
           json =>
-            (options.value = json.map(({ name, country, lat, lon }, index) => ({ id: index, name, country, lat, lon })))
+            (options.value = json.map(({ name, country, lat, lon }, index) => ({
+              id: `${lat}&${lon}`,
+              name,
+              country,
+              lat,
+              lon
+            })))
         );
     }, delay);
   });

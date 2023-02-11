@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+
 withDefaults(
   defineProps<{
     modelValue: string;
@@ -14,6 +16,11 @@ withDefaults(
 );
 const emit = defineEmits(['update:modelValue']);
 
+const inputEl = ref<HTMLInputElement>();
+defineExpose({
+  inputEl
+});
+
 const inputHandler = (event: Event) => {
   emit('update:modelValue', (event.target as HTMLInputElement).value);
 };
@@ -26,7 +33,8 @@ const inputHandler = (event: Event) => {
     :class="styles.input"
     :type="type"
     :placeholder="placeholder"
-    :disabled="disabled" />
+    :disabled="disabled"
+    ref="inputEl" />
 </template>
 
 <style module="styles" lang="scss">

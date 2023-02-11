@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type CityEntity from '@/typings/CityEntity';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, type Ref } from 'vue';
 import InputUi from '../../UI/InputUi.vue';
 
 const props = defineProps<{
@@ -22,6 +22,11 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('click', onWindowClick);
+});
+
+const refs = ref<{ inputEl: Ref<HTMLElement> }>();
+defineExpose({
+  refs
 });
 
 const isShown = ref(true);
@@ -51,6 +56,7 @@ const onInputFocus = () => {
       @click.stop
       @update:modelValue="$emit('update:modelValue', $event)"
       @focus="onInputFocus"
+      ref="refs"
       autocomplete="off" />
     <ul
       v-show="isShow"

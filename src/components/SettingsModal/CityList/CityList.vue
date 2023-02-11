@@ -10,7 +10,7 @@ import ButtonWIthIcon from '../../UI/ButtonWIthIcon.vue';
 const props = defineProps<{ cities: CityEntity[] }>();
 const emit = defineEmits<{
   (event: 'reorderCities', updatedCities: CityEntity[]): void;
-  (event: 'removeCity', cityId: number): void;
+  (event: 'removeCity', cityId: string): void;
 }>();
 
 const localCities = ref<CityEntity[]>(props.cities);
@@ -148,7 +148,7 @@ const dragEndHandler = () => {
   emit('reorderCities', localCities.value);
 };
 
-const onRemoveCity = (cityId: number): void => {
+const onRemoveCity = (cityId: string): void => {
   emit('removeCity', cityId);
 };
 </script>
@@ -171,7 +171,9 @@ const onRemoveCity = (cityId: number): void => {
           <HamburgerIcon />
         </div>
         <span :class="styles.cityName">{{ city.name }}, {{ city.country }}</span>
-        <ButtonWIthIcon :class="styles.cityItemTrash" @click="onRemoveCity(city.id)">
+        <ButtonWIthIcon
+          :class="styles.cityItemTrash"
+          @click="onRemoveCity(city.id)">
           <TrashIcon />
         </ButtonWIthIcon>
       </div>
