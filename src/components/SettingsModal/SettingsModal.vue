@@ -2,7 +2,7 @@
 import TitleUi from '../UI/TitleUi.vue';
 import CityList from './CityList/CityList.vue';
 import AddCityForm from './AddCityForm/AddCityForm.vue';
-import type CityEntity from '@/typings/CityEntity';
+import type CityEntity from '@/typings/models/CityEntity';
 
 export interface SettingsProps {
   cities: City[];

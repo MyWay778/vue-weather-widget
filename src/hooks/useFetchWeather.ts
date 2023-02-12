@@ -1,5 +1,5 @@
-import type CityEntity from '@/typings/CityEntity';
-import type WeatherApi from '@/typings/WeatherApi';
+import type CityEntity from '@/typings/models/CityEntity';
+import type WeatherApi from '@/typings/api/WeatherApi';
 import { ref, type Ref } from 'vue';
 
 const API_URL = 'http://api.openweathermap.org/data/2.5/weather';
@@ -22,14 +22,22 @@ export default function useFeatchWeather(city: CityEntity): CityApiData {
   const isLoading = ref<boolean>(true);
   const isError = ref<boolean>(false);
 
-  setTimeout(() => {
-    fetch(url)
-      .then(response => response.json() as Promise<WeatherApi>)
-      .then(json => {
-        data.value = json;
-        isLoading.value = false;
-      });
-  }, 1000 + Math.random() * 5000);
+  fetch(url)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`status: ${response.status} ${response.statusText}`);
+      }
+      return response.json() as Promise<WeatherApi>;
+    })
+    .then(json => {
+      data.value = json;
+      isLoading.value = false;
+    })
+    .catch(error => {
+      console.warn('useFeatchWeather:', error);
+      isError.value = true;
+      isLoading.value = false;
+    });
 
   return { data, isLoading, isError };
 }

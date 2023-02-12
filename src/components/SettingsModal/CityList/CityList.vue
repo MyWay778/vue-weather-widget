@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import setElementTransform from '@/helpers/setElementTransform';
 import swapArrayItems from '@/helpers/swapArrayItems';
-import type CityEntity from '@/typings/CityEntity';
+import type CityEntity from '@/typings/models/CityEntity';
 import { computed, onMounted, ref, watch, watchEffect } from 'vue';
 import HamburgerIcon from '@/components/icons/HamburgerIcon.vue';
 import TrashIcon from '../../icons/TrashIcon.vue';

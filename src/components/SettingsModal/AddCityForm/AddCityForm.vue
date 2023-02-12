@@ -2,23 +2,29 @@
 import TitleUi from '../../UI/TitleUi.vue';
 import ArrowLeftIcon from '../../icons/ArrowLeftIcon.vue';
 import ButtonWIthIcon from '../../UI/ButtonWIthIcon.vue';
-import InputWithOptions from './InputWithOptions.vue';
+import InputWithOptions, { type InputWithOptionsRef } from './InputWithOptions.vue';
 import { computed, ref, watch } from 'vue';
 import useFetchCityOptions from '@/hooks/useFetchCityOptions';
-import type CityEntity from '@/typings/CityEntity';
+import type CityEntity from '@/typings/models/CityEntity';
 
 const emit = defineEmits<{
   (event: 'addCity', city: CityEntity): void;
 }>();
 
-const inputEl = ref<{ refs: { inputEl: HTMLInputElement } }>();
+const inputWithOptionsRef = ref<InputWithOptionsRef>();
 const cityInput = ref('');
 const cityRequest = ref('');
-const options = useFetchCityOptions(cityRequest);
+const { options, isError } = useFetchCityOptions(cityRequest);
 let selectedOption = ref<CityEntity>();
 let isOptionSelected = false;
 let message = ref('');
 let isSubmitDisabled = computed(() => !selectedOption.value);
+
+watch(isError, () => {
+  if (isError.value) {
+    message.value = 'Request faild.';
+  }
+});
 
 watch(cityInput, () => {
   message.value = '';
@@ -41,7 +47,7 @@ const submitHandler = (event: Event): void => {
       message.value = 'City not found, try changing its name.';
     }
 
-    inputEl.value?.refs.inputEl.focus();
+    inputWithOptionsRef.value?.focusInput();
   } else {
     emit('addCity', selectedOption.value);
     cityInput.value = '';
@@ -71,7 +77,7 @@ const isShowOptions = computed(() => {
         :class="styles.input"
         :options="options"
         @option-click="onOptionClick"
-        ref="inputEl"
+        ref="inputWithOptionsRef"
         type="search"
         placeholder="Enter city..." />
 
@@ -82,7 +88,11 @@ const isShowOptions = computed(() => {
       </ButtonWIthIcon>
     </div>
 
-    <div :class="styles.message">{{ message }}</div>
+    <div
+      v-show="message"
+      :class="styles.message">
+      {{ message }}
+    </div>
   </form>
 </template>
 

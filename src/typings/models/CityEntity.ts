@@ -5,5 +5,4 @@ export default interface CityEntity {
   country: string;
   lat: number;
   lon: number;
-  weatherId?: number;
 }

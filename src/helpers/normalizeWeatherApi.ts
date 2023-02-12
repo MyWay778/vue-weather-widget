@@ -1,5 +1,5 @@
-import type CityWeatherEntity from '@/typings/CityWeatherEntity';
-import type WeatherApi from '@/typings/WeatherApi';
+import type CityWeatherEntity from '@/typings/models/CityWeatherEntity';
+import type WeatherApi from '@/typings/api/WeatherApi';
 import capitalizeFirstLetter from './capitalizeFirstLetter';
 import changeNumberPrecision from './changeNumberPrecision';
 import convertMetersToKm from './convertMetersToKm';

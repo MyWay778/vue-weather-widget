@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+export interface InputUiRef {
+  focusInput: () => void;
+}
+
 withDefaults(
   defineProps<{
     modelValue: string;
@@ -17,8 +21,14 @@ withDefaults(
 const emit = defineEmits(['update:modelValue']);
 
 const inputEl = ref<HTMLInputElement>();
+const focusInput = () => {
+  if (inputEl.value) {
+    inputEl.value.focus();
+  }
+};
+
 defineExpose({
-  inputEl
+  focusInput
 });
 
 const inputHandler = (event: Event) => {

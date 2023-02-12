@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type CityWeatherEntity from '@/typings/CityWeatherEntity';
-import CelsiusUnitValue from '../CelsiusUnitValue.vue';
+import type CityWeatherEntity from '@/typings/models/CityWeatherEntity';
+import CelsiusUnitValue from '../UI/CelsiusUnitValue.vue';
 import CompassIcon from '../icons/CompassIcon.vue';
 import TitleUi from '../UI/TitleUi.vue';
-import WindArrow from '../WindArrow.vue';
+import WindArrow from '../UI/WindArrow.vue';
 
 // eslint-disable-next-line vue/no-setup-props-destructure
 const { weather } = defineProps<{ weather: CityWeatherEntity }>();

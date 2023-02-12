@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import SettingsIcon from './components/icons/SettingIcon.vue';
 import ButtonWIthIcon from './components/UI/ButtonWIthIcon.vue';
-import CityPanel from './components/CityPanel.vue';
+import CityPanel from './components/CityPanel/CityPanel.vue';
 import ModalUi from './components/UI/ModalUi.vue';
 import SettingsModal from './components/SettingsModal/SettingsModal.vue';
 import { ref } from 'vue';
-import type CityEntity from './typings/CityEntity';
+import type CityEntity from './typings/models/CityEntity';
 
 const cities = ref<CityEntity[]>([
   // {

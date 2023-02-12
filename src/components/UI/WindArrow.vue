@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ArrowIcon from './icons/ArrowIcon.vue';
+import ArrowIcon from '../icons/ArrowIcon.vue';
 
 defineProps<{ deg: number }>();
 </script>
