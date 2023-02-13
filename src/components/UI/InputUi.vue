@@ -5,7 +5,7 @@ export interface InputUiRef {
   focusInput: () => void;
 }
 
-withDefaults(
+const props = withDefaults(
   defineProps<{
     modelValue: string;
     type: string;
@@ -32,7 +32,12 @@ defineExpose({
 });
 
 const inputHandler = (event: Event) => {
-  emit('update:modelValue', (event.target as HTMLInputElement).value);
+  const target = event.target as HTMLInputElement;
+  const newValue = target.value;
+
+  target.value = props.modelValue;
+
+  emit('update:modelValue', newValue);
 };
 </script>
 

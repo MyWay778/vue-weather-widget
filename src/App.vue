@@ -83,10 +83,9 @@ const onAddCity = (city: CityEntity): void => {
   width: 260px;
   min-height: var(--widget-min-height);
   padding: 20px;
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   background-color: var(--white);
   box-shadow: 2px 2px 5px 2px var(--shadow);
-  overflow: hidden;
 }
 
 .settingsBtn {

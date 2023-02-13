@@ -6,10 +6,12 @@ export function getStorage<T>(storageKey: string) {
       if (typeof value === 'string') {
         storage.setItem(storageKey, value);
       }
+
       storage.setItem(storageKey, JSON.stringify(value));
     },
     get: ({ isStringify = false }) => {
       const value = storage.getItem(storageKey);
+
       if (value && isStringify) {
         try {
           return JSON.parse(value) as T;

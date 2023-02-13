@@ -12,7 +12,7 @@ export interface CityApiData {
   isError: Ref<boolean>;
 }
 
-export default function useFeatchWeather(city: CityEntity): CityApiData {
+export default function useFeatchWeather(city: CityEntity, minDelay = 0): CityApiData {
   const url = new URL(API_URL);
   url.searchParams.append('q', `${city.name},${city.country}`);
   url.searchParams.append('units', UNITS);
@@ -22,6 +22,13 @@ export default function useFeatchWeather(city: CityEntity): CityApiData {
   const isLoading = ref<boolean>(true);
   const isError = ref<boolean>(false);
 
+  const startTime = Date.now();
+
+  const setData = (json: WeatherApi) => {
+    data.value = json;
+    isLoading.value = false;
+  };
+
   fetch(url)
     .then(response => {
       if (!response.ok) {
@@ -30,8 +37,15 @@ export default function useFeatchWeather(city: CityEntity): CityApiData {
       return response.json() as Promise<WeatherApi>;
     })
     .then(json => {
-      data.value = json;
-      isLoading.value = false;
+      const endTime = Date.now();
+      const timeDiff = endTime - startTime;
+      if (minDelay && timeDiff < minDelay) {
+        setTimeout(() => {
+          setData(json);
+        }, minDelay - timeDiff);
+      } else {
+        setData(json);
+      }
     })
     .catch(error => {
       console.warn('useFeatchWeather:', error);

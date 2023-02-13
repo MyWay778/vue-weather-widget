@@ -7,7 +7,7 @@ import WeatherDisplay from './WeatherDisplay.vue';
 import Loader from '@UI/LoaderUi.vue';
 
 const props = defineProps<{ city: CityEntity }>();
-const weatherResponse = reactive(useFeatchWeather(props.city));
+const weatherResponse = reactive(useFeatchWeather(props.city, 1000));
 
 const normalizedWeather = computed(() => {
   if (!weatherResponse.data) {

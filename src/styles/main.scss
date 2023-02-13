@@ -23,6 +23,9 @@
     // SIZES:
     --widget-width: 260px;
     --widget-min-height: 236px;
+
+    // OTHERS:
+    --border-radius: 10px;
 }
 
 
@@ -35,20 +38,6 @@ html {
 ul, ol {
     list-style: none;
 }
-
-// .button {
-//     background: none;
-//     border: none;
-//     cursor: pointer;
-//     font-family: var(--font-family);
-//     font-size: var(--font-size);
-//     color: var(--black);
-//     transition: color .2s;
-
-//     &:hover {
-//       color: var(--active);
-//     }
-// }
 
 @keyframes rotation {
     from {

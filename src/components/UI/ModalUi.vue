@@ -25,6 +25,7 @@ import ButtonWIthIcon from './ButtonWIthIcon.vue';
   height: 100%;
   padding: 20px;
   background-color: var(--white);
+  border-radius: var(--border-radius);
 }
 
 .close {

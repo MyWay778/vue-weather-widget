@@ -26,9 +26,9 @@ watch(isError, () => {
   }
 });
 
-watch(cityInput, () => {
+watch(cityInput, (oldValue, newValue) => {
   message.value = '';
-
+  console.log('cityInput', oldValue, newValue);
   // if the user selects an option, nothing needs to be done,
   // otherwise reset the values and request new options
   if (isOptionSelected) {
@@ -99,7 +99,7 @@ const onEnterDown = () => {
 
     <div :class="styles.cityName">
       <InputWithOptions
-        v-model.trim="cityInput"
+        v-model="cityInput"
         :class="styles.input"
         :options="options"
         @option-click="onOptionClick"

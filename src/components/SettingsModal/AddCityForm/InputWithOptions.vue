@@ -2,6 +2,7 @@
 import type CityEntity from '@/typings/models/CityEntity';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import InputUi, { type InputUiRef } from '@UI/InputUi.vue';
+import sanitizeInput, { dangerChars } from '@/helpers/sanitizeInput';
 
 export interface InputWithOptionsRef {
   focusInput: () => void;
@@ -56,6 +57,11 @@ const onWindowClick = () => {
 const onInputFocus = () => {
   isNeedShow.value = true;
 };
+
+const onUpdateModelValue = (value: string) => {
+  const saveText = sanitizeInput(value.trim(), dangerChars.safeText);
+  emit('update:modelValue', saveText);
+};
 </script>
 
 <template>
@@ -67,7 +73,7 @@ const onInputFocus = () => {
       :type="inputType"
       :placeholder="placeholder"
       @click.stop
-      @update:modelValue="$emit('update:modelValue', $event)"
+      @update:modelValue="onUpdateModelValue"
       @focus="onInputFocus"
       @keydown.enter="$emit('enterDown')"
       ref="inputUiRef"
