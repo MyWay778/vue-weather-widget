@@ -35,6 +35,17 @@ const isShowAddCityForm = computed(() => props.cities.length < MAX_CITIES);
   <AddCityForm
     v-if="isShowAddCityForm"
     @add-city="onAddCity" />
+
+  <div
+    v-else
+    :class="styles.message">
+    The maximum number of cities has been selected. Please remove one or more to add a new one.
+  </div>
 </template>
 
-<style module="styles" lang="scss"></style>
+<style module="styles" lang="scss">
+.message {
+  margin-top: 15px;
+  text-align: center;
+}
+</style>
