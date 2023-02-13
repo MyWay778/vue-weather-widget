@@ -4,32 +4,22 @@ import ButtonWIthIcon from './components/UI/ButtonWIthIcon.vue';
 import CityPanel from './components/CityPanel/CityPanel.vue';
 import ModalUi from './components/UI/ModalUi.vue';
 import SettingsModal from './components/SettingsModal/SettingsModal.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import type CityEntity from './typings/models/CityEntity';
+import { getStorage } from './helpers/getStorage';
 
-const cities = ref<CityEntity[]>([
-  // {
-  //   id: 8890,
-  //   name: 'Chita',
-  //   country: 'RU',
-  //   lat: 51.5085,
-  //   lon: -0.1257
-  // },
-  {
-    id: '2075535',
-    name: 'London',
-    country: 'GB',
-    lat: 51.5085,
-    lon: -0.1257
+const STORAGE_KEY = 'weatherAppCities';
+const cityStorage = getStorage<CityEntity[]>(STORAGE_KEY);
+
+const cityFromStorage = cityStorage.get({ isStringify: true }) ?? [];
+const cities = ref(cityFromStorage);
+watch(
+  cities,
+  () => {
+    cityStorage.save(cities.value);
   },
-  {
-    id: '2018597',
-    name: 'Moscow',
-    country: 'Ru',
-    lat: 51.5085,
-    lon: -0.1257
-  }
-]);
+  { deep: true }
+);
 
 const isSettingsOpened = ref(false);
 const clickOnSettingsHandler = () => {
