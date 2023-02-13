@@ -2,7 +2,6 @@
 
 <template>
   <button
-    class="button"
     :class="styles.button"
     type="button">
     <slot></slot>
@@ -10,7 +9,10 @@
 </template>
 
 <style module="styles" lang="scss">
+@import '@/styles/mixins.scss';
+
 .button {
+  @include common-button;
   width: 20px;
   height: 20px;
 }

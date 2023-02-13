@@ -8,6 +8,7 @@
 
 
 :root {
+    // COLORS:
     --black: #3b3b3b;
     --gray: #c2c2c2;
     --gray-light: #d1d1d1;
@@ -15,8 +16,13 @@
     --white: #fff;
     --active: #5faffa;
 
+    // FONT:
     --font-size: 16px;
     --font-family: "Open Sans", sans-serif;
+
+    // SIZES:
+    --widget-width: 260px;
+    --widget-min-height: 236px;
 }
 
 
@@ -30,19 +36,19 @@ ul, ol {
     list-style: none;
 }
 
-.button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: var(--font-family);
-    font-size: var(--font-size);
-    color: var(--black);
-    transition: color .2s;
+// .button {
+//     background: none;
+//     border: none;
+//     cursor: pointer;
+//     font-family: var(--font-family);
+//     font-size: var(--font-size);
+//     color: var(--black);
+//     transition: color .2s;
 
-    &:hover {
-      color: var(--active);
-    }
-}
+//     &:hover {
+//       color: var(--active);
+//     }
+// }
 
 @keyframes rotation {
     from {

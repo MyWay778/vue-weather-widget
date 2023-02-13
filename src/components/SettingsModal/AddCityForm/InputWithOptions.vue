@@ -1,18 +1,17 @@
 <script setup lang="ts">
 import type CityEntity from '@/typings/models/CityEntity';
-import { computed, onBeforeUnmount, onMounted, ref, type Ref } from 'vue';
-import InputUi, { type InputUiRef } from '../../UI/InputUi.vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import InputUi, { type InputUiRef } from '@UI/InputUi.vue';
 
 export interface InputWithOptionsRef {
   focusInput: () => void;
 }
 
 const props = defineProps<{
-  modelValue: string;
-  type: string;
+  modelValue: string; // input value
+  inputType: string;
   placeholder: string;
   options: CityEntity[];
-  isShowOptions: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -28,6 +27,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('click', onWindowClick);
 });
 
+// get a reference to the inputUi component to expose the focus method
 const inputUiRef = ref<InputUiRef>();
 const focusInput = () => {
   if (inputUiRef.value) {
@@ -39,19 +39,21 @@ defineExpose({
   focusInput
 });
 
-const isShown = ref(true);
-const isShow = computed(() => Boolean(isShown.value && props.options.length));
+// internal flag to show or not options
+const isNeedShow = ref(true);
+const isShowOptions = computed(() => Boolean(isNeedShow.value && props.options.length));
 
 const onOptionClick = (option: CityEntity) => {
   emit('optionClick', option);
 };
 
+// hide options by clicking outside the input
 const onWindowClick = () => {
-  isShown.value = false;
+  isNeedShow.value = false;
 };
 
 const onInputFocus = () => {
-  isShown.value = true;
+  isNeedShow.value = true;
 };
 </script>
 
@@ -61,22 +63,22 @@ const onInputFocus = () => {
     @click.stop>
     <InputUi
       :model-value="modelValue"
-      :type="type"
+      :type="inputType"
       :placeholder="placeholder"
       @click.stop
       @update:modelValue="$emit('update:modelValue', $event)"
       @focus="onInputFocus"
       ref="inputUiRef"
       autocomplete="off" />
+
     <ul
-      v-show="isShow"
+      v-show="isShowOptions"
       :class="styles.suggestions">
       <button
         v-for="option in options"
         :key="option.id"
         :class="styles.button"
         @click="onOptionClick(option)"
-        class="button"
         type="button">
         {{ option.name }}, {{ option.country }}
       </button>
@@ -85,6 +87,8 @@ const onInputFocus = () => {
 </template>
 
 <style module="styles" lang="scss">
+@import '@/styles/mixins.scss';
+
 .container {
   position: relative;
 }
@@ -119,6 +123,7 @@ const onInputFocus = () => {
 }
 
 .button {
+  @include common-button;
   text-align: left;
 }
 </style>

@@ -71,6 +71,8 @@ const onAddCity = (city: CityEntity): void => {
 </template>
 
 <style module="styles" lang="scss">
+@import '@/styles/mixins.scss';
+
 .widgetContainer {
   margin: 100px;
 
@@ -79,7 +81,7 @@ const onAddCity = (city: CityEntity): void => {
   flex-direction: column;
   row-gap: 60px;
   width: 260px;
-  min-height: 292px;
+  min-height: var(--widget-min-height);
   padding: 20px;
   border-radius: 10px;
   background-color: var(--white);
@@ -104,12 +106,9 @@ const onAddCity = (city: CityEntity): void => {
 }
 
 .message {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  @include absolute-center;
   text-align: center;
   font-size: 18px;
-  transform: translate(-50%, -50%);
 
   &Icon {
     width: 18px;

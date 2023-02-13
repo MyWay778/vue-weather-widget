@@ -2,10 +2,10 @@
 import setElementTransform from '@/helpers/setElementTransform';
 import swapArrayItems from '@/helpers/swapArrayItems';
 import type CityEntity from '@/typings/models/CityEntity';
-import { computed, onMounted, ref, watch, watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import HamburgerIcon from '@/components/icons/HamburgerIcon.vue';
 import TrashIcon from '../../icons/TrashIcon.vue';
-import ButtonWIthIcon from '../../UI/ButtonWIthIcon.vue';
+import ButtonWIthIcon from '@UI/ButtonWIthIcon.vue';
 
 const props = defineProps<{ cities: CityEntity[] }>();
 const emit = defineEmits<{
@@ -14,24 +14,21 @@ const emit = defineEmits<{
 }>();
 
 const localCities = ref<CityEntity[]>(props.cities);
-
 watchEffect(() => {
   localCities.value = props.cities;
 });
 
 const list = ref<HTMLElement>();
 let listReact: DOMRect | null = null;
-// onMounted(() => {
-//   if (list.value) {
-//     listReact = list.value.getBoundingClientRect();
-//   }
-// });
 
 const TRANSFORM_SCALE = 1.03;
 const items = ref<HTMLElement[]>([]);
 
+// values for the drag and drop feature
 let initialX = 0;
 let initialY = 0;
+
+// activeEl - the element being dragged
 let activeEl: HTMLElement | null = null;
 let activeIndex = ref(-1);
 
@@ -47,6 +44,7 @@ const dragStartHandler = (event: MouseEvent, index: number) => {
     listReact = list.value.getBoundingClientRect();
   }
 
+  // make active element visually active
   setElementTransform(activeEl, { scale: TRANSFORM_SCALE });
 
   window.addEventListener('mousemove', dragHandler);
@@ -58,15 +56,20 @@ const dragHandler = (event: MouseEvent) => {
   const x = event.x - initialX;
   const y = event.y - initialY;
 
+  // moving active element
   setElementTransform(activeEl, { x, y, scale: TRANSFORM_SCALE });
 
+  // get position of activeEl(draggable)
   const activeRect = activeEl.getBoundingClientRect();
 
+  // loop through elements to find intersection with activeEl(dragabble)
   items.value.forEach((target, targetIndex) => {
     if (target === activeEl) return;
 
+    // get target(target for drop) position
     const targetRect = target.getBoundingClientRect();
 
+    // if active (draggable) element is in position (above or below target) - swap elements
     if (activeBelowTarget() || activeAboveTarget()) {
       swapActiveAndTarget();
     }
@@ -90,25 +93,32 @@ const dragHandler = (event: MouseEvent) => {
     }
 
     function swapActiveAndTarget(): void {
+      // need to synchronize localCities (data to render) and elements (dom elements)
       localCities.value = swapArrayItems(localCities.value, activeIndex.value, targetIndex);
       items.value = swapArrayItems(items.value, activeIndex.value, targetIndex);
 
       activeIndex.value = targetIndex;
 
+      // by changing the order of the elements, we need to update the position of the active element
       updateActivePos();
     }
 
     function updateActivePos(): void {
       if (!activeEl) return;
 
+      // we are using scaling in the transform that resizes the element, so we need to resolve this difference
       const scaleXDiff = getScaleDiff(activeRect.width);
+      // after changing the order of the elements, the active element is set to the place of the target element,
+      // but the active element can be shifted from the target, and we need to get this offset
       const actualX = activeRect.x - targetRect.x + scaleXDiff;
+      // nitialX - the current mouse position without the x offset of the active element
       initialX = event.x - actualX;
 
       const scaleYDiff = getScaleDiff(activeRect.height);
       const actualY = activeRect.y - targetRect.y + scaleYDiff;
       initialY = event.y - actualY;
 
+      // update active element position
       setElementTransform(activeEl, { x: actualX, y: actualY, scale: TRANSFORM_SCALE });
     }
 
@@ -118,6 +128,7 @@ const dragHandler = (event: MouseEvent) => {
     }
   });
 
+  // if the active (draggable) element is outside the list, stop dragging
   if (activeIsOutOfBounds()) {
     dragEndHandler();
   }
@@ -170,7 +181,9 @@ const onRemoveCity = (cityId: string): void => {
           @mousedown="dragStartHandler($event, index)">
           <HamburgerIcon />
         </div>
+
         <span :class="styles.cityName">{{ city.name }}, {{ city.country }}</span>
+
         <ButtonWIthIcon
           :class="styles.cityItemTrash"
           @click="onRemoveCity(city.id)">

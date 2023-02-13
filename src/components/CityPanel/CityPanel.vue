@@ -4,7 +4,7 @@ import useFeatchWeather from '@/hooks/useFetchWeather';
 import type CityEntity from '@/typings/models/CityEntity';
 import { computed, reactive } from 'vue';
 import WeatherDisplay from './WeatherDisplay.vue';
-import SunLoader from '../UI/SunLoader.vue';
+import Loader from '@UI/LoaderUi.vue';
 
 const props = defineProps<{ city: CityEntity }>();
 const weatherResponse = reactive(useFeatchWeather(props.city));
@@ -20,7 +20,7 @@ const normalizedWeather = computed(() => {
 
 <template>
   <section :class="styles.cityPanel">
-    <SunLoader v-if="weatherResponse.isLoading" />
+    <Loader v-if="weatherResponse.isLoading" />
 
     <WeatherDisplay
       v-if="normalizedWeather"
@@ -39,7 +39,7 @@ const normalizedWeather = computed(() => {
 
 .cityPanel {
   position: relative;
-  min-height: 236px;
+  min-height: var(--widget-min-height);
 }
 
 .errorMessage {

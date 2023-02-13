@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import TitleUi from '../../UI/TitleUi.vue';
+import TitleUi from '@UI/TitleUi.vue';
 import ArrowLeftIcon from '../../icons/ArrowLeftIcon.vue';
-import ButtonWIthIcon from '../../UI/ButtonWIthIcon.vue';
+import ButtonWIthIcon from '@UI/ButtonWIthIcon.vue';
 import InputWithOptions, { type InputWithOptionsRef } from './InputWithOptions.vue';
 import { computed, ref, watch } from 'vue';
 import useFetchCityOptions from '@/hooks/useFetchCityOptions';
@@ -11,12 +11,12 @@ const emit = defineEmits<{
   (event: 'addCity', city: CityEntity): void;
 }>();
 
-const inputWithOptionsRef = ref<InputWithOptionsRef>();
+const inputWithOptionsRef = ref<InputWithOptionsRef>(); // a reference to the inputWithOprions component
 const cityInput = ref('');
 const cityRequest = ref('');
-const { options, isError } = useFetchCityOptions(cityRequest);
+const { options, isError } = useFetchCityOptions(cityRequest, 600);
 let selectedOption = ref<CityEntity>();
-let isOptionSelected = false;
+let isOptionSelected = false; // flag to know if the user has selected an option
 let message = ref('');
 let isSubmitDisabled = computed(() => !selectedOption.value);
 
@@ -29,6 +29,8 @@ watch(isError, () => {
 watch(cityInput, () => {
   message.value = '';
 
+  // if the user selects an option, nothing needs to be done,
+  // otherwise reset the values and request new options
   if (isOptionSelected) {
     isOptionSelected = false;
     return;
@@ -40,30 +42,29 @@ watch(cityInput, () => {
 });
 
 const submitHandler = (event: Event): void => {
+  // to prevent hiding options
   event.stopPropagation();
 
-  if (!selectedOption.value) {
-    if (!options.value.length) {
-      message.value = 'City not found, try changing its name.';
-    }
-
-    inputWithOptionsRef.value?.focusInput();
-  } else {
+  if (selectedOption.value) {
     emit('addCity', selectedOption.value);
     cityInput.value = '';
+  } else {
+    // if there are options focus on the input field
+    if (options.value.length) {
+      inputWithOptionsRef.value?.focusInput();
+    } else {
+      message.value = 'City not found, try changing its name.';
+    }
   }
 };
 
 const onOptionClick = (option: CityEntity): void => {
   selectedOption.value = option;
-  cityInput.value = `${option.name}, ${option.country}`;
+
+  cityInput.value = `${option.name}, ${option.country}`; // set the selected option in the input field
   cityRequest.value = '';
   isOptionSelected = true;
 };
-
-const isShowOptions = computed(() => {
-  return Boolean(!selectedOption.value && options.value.length);
-});
 </script>
 
 <template>
@@ -73,12 +74,11 @@ const isShowOptions = computed(() => {
     <div :class="styles.cityName">
       <InputWithOptions
         v-model.trim="cityInput"
-        :is-show-options="isShowOptions"
         :class="styles.input"
         :options="options"
         @option-click="onOptionClick"
         ref="inputWithOptionsRef"
-        type="search"
+        inputType="search"
         placeholder="Enter city..." />
 
       <ButtonWIthIcon

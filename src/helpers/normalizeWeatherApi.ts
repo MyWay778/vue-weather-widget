@@ -22,6 +22,6 @@ export default function normalizeWeatherApi(weatherData: WeatherApi): CityWeathe
     humidity: weatherData.main.humidity,
     pressure: weatherData.main.pressure,
     seaLevel: weatherData.main.sea_level && changeNumberPrecision(convertMetersToKm(weatherData.main.sea_level)),
-    visibility: convertMetersToKm(weatherData.visibility)
+    visibility: changeNumberPrecision(convertMetersToKm(weatherData.visibility))
   };
 }

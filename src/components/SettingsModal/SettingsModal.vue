@@ -1,32 +1,27 @@
 <script setup lang="ts">
-import TitleUi from '../UI/TitleUi.vue';
+import TitleUi from '@UI/TitleUi.vue';
 import CityList from './CityList/CityList.vue';
 import AddCityForm from './AddCityForm/AddCityForm.vue';
 import type CityEntity from '@/typings/models/CityEntity';
+import { computed } from 'vue';
 
-export interface SettingsProps {
-  cities: City[];
-}
+const MAX_CITIES = 3;
 
-export interface City {
-  id: number;
-  name: string;
-  country: string;
-}
-
-defineProps<{
+const props = defineProps<{
   cities: CityEntity[];
 }>();
 
 const emit = defineEmits<{
   (event: 'reorderCities', cities: CityEntity[]): void;
   (event: 'removeCity', cityId: string): void;
-  (event: 'addCity', city: CityEntity): void
+  (event: 'addCity', city: CityEntity): void;
 }>();
 
 const onAddCity = (city: CityEntity): void => {
   emit('addCity', city);
 };
+
+const isShowAddCityForm = computed(() => props.cities.length < MAX_CITIES);
 </script>
 
 <template>
@@ -37,7 +32,9 @@ const onAddCity = (city: CityEntity): void => {
     @reorder-cities="$emit('reorderCities', $event)"
     @remove-city="$emit('removeCity', $event)" />
 
-  <AddCityForm @add-city="onAddCity" />
+  <AddCityForm
+    v-if="isShowAddCityForm"
+    @add-city="onAddCity" />
 </template>
 
 <style module="styles" lang="scss"></style>
