@@ -21,9 +21,7 @@ const { weather } = defineProps<{ weather: CityWeatherEntity }>();
         :atl="weather.main" />
     </div>
     <div :class="styles.value">
-      <span>{{ weather.temp }}</span>
-      <sup :class="styles.units">o</sup>
-      <span>C</span>
+      <CelsiusUnitValue :value="weather.temp" />
     </div>
   </div>
 
@@ -48,16 +46,16 @@ const { weather } = defineProps<{ weather: CityWeatherEntity }>();
         <span>{{ weather.humidity }}%</span>
       </div>
 
+      <div :class="styles.entry">
+        <span :class="styles.entryTitle">Visibility: </span>
+        <span>{{ weather.visibility }}km</span>
+      </div>
+
       <div
         v-if="weather.seaLevel"
         :class="styles.entry">
         <span :class="styles.entryTitle">Sea level: </span>
         <span>{{ weather.seaLevel }}km</span>
-      </div>
-
-      <div :class="styles.entry">
-        <span :class="styles.entryTitle">Visibility: </span>
-        <span>{{ weather.visibility }}km</span>
       </div>
     </div>
   </div>

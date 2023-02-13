@@ -41,19 +41,33 @@ watch(cityInput, () => {
   cityRequest.value = cityInput.value;
 });
 
-const submitHandler = (event: Event): void => {
+const addCity = () => {
+  if (!selectedOption.value) return;
+
+  emit('addCity', selectedOption.value);
+  cityInput.value = '';
+};
+
+const showMessage = () => {
+  if (cityInput.value.length) {
+    message.value = 'City not found, try changing its name.';
+  } else {
+    message.value = 'Enter the name of the city, for example "Moscow, RU"';
+  }
+};
+
+const onSubmit = (event: Event): void => {
   // to prevent hiding options
   event.stopPropagation();
 
   if (selectedOption.value) {
-    emit('addCity', selectedOption.value);
-    cityInput.value = '';
+    addCity();
   } else {
-    // if there are options focus on the input field
+    // if there are options focus on the input field to show options
     if (options.value.length) {
       inputWithOptionsRef.value?.focusInput();
     } else {
-      message.value = 'City not found, try changing its name.';
+      showMessage();
     }
   }
 };
@@ -64,11 +78,23 @@ const onOptionClick = (option: CityEntity): void => {
   cityInput.value = `${option.name}, ${option.country}`; // set the selected option in the input field
   cityRequest.value = '';
   isOptionSelected = true;
+
+  inputWithOptionsRef.value?.focusInput();
+};
+
+const onEnterDown = () => {
+  if (selectedOption.value) {
+    addCity();
+  } else {
+    showMessage();
+  }
 };
 </script>
 
 <template>
-  <form :class="styles.addCityForm">
+  <form
+    :class="styles.addCityForm"
+    @submit.prevent>
     <TitleUi :class="styles.title">Add Location:</TitleUi>
 
     <div :class="styles.cityName">
@@ -77,19 +103,20 @@ const onOptionClick = (option: CityEntity): void => {
         :class="styles.input"
         :options="options"
         @option-click="onOptionClick"
+        @enter-down="onEnterDown"
         ref="inputWithOptionsRef"
         inputType="search"
         placeholder="Enter city..." />
 
       <ButtonWIthIcon
         :class="[styles.arrowBtn, { [styles.disabled]: isSubmitDisabled }]"
-        @click="submitHandler">
+        @click="onSubmit">
         <ArrowLeftIcon />
       </ButtonWIthIcon>
     </div>
 
     <div
-      v-show="message"
+      v-show="message && !options.length"
       :class="styles.message">
       {{ message }}
     </div>

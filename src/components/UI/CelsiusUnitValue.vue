@@ -10,7 +10,7 @@ defineProps<{ value: number }>();
 .celsius {
   vertical-align: middle;
   position: relative;
-  top: -0.8em;
+  top: -0.6em;
   font-size: 0.6em;
 }
 </style>

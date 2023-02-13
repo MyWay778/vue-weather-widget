@@ -79,13 +79,14 @@ const onAddCity = (city: CityEntity): void => {
   position: relative;
   display: flex;
   flex-direction: column;
-  row-gap: 60px;
+  row-gap: 50px;
   width: 260px;
   min-height: var(--widget-min-height);
   padding: 20px;
   border-radius: 10px;
   background-color: var(--white);
-  box-shadow: 1px 1px 4px 0 var(--shadow);
+  box-shadow: 2px 2px 5px 2px var(--shadow);
+  overflow: hidden;
 }
 
 .settingsBtn {

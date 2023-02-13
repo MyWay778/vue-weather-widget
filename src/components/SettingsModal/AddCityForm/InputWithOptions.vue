@@ -17,6 +17,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'update:modelValue', modelValue: string): void;
   (e: 'optionClick', value: CityEntity): void;
+  (e: 'enterDown'): void;
 }>();
 
 onMounted(() => {
@@ -68,6 +69,7 @@ const onInputFocus = () => {
       @click.stop
       @update:modelValue="$emit('update:modelValue', $event)"
       @focus="onInputFocus"
+      @keydown.enter="$emit('enterDown')"
       ref="inputUiRef"
       autocomplete="off" />
 
