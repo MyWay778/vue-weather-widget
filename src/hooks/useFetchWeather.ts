@@ -18,15 +18,7 @@ export default function useFeatchWeather(city: CityEntity, minDelay = 0): CityAp
     console.warn('useFeatchWeather: api key was not injected!');
   }
 
-  const url = createUrl(API_URL, [
-    {
-      key: 'lat',
-      value: String(city.lat)
-    },
-    {
-      key: 'lon',
-      value: String(city.lon)
-    },
+  const queryParams = [
     {
       key: 'units',
       value: UNITS
@@ -35,7 +27,27 @@ export default function useFeatchWeather(city: CityEntity, minDelay = 0): CityAp
       key: 'appid',
       value: apiKey ?? ''
     }
-  ]);
+  ];
+
+  if (city.name && city.country) {
+    queryParams.push({
+      key: 'q',
+      value: `${city.name},${city.country}`
+    });
+  } else {
+    queryParams.push(
+      {
+        key: 'lat',
+        value: String(city.lat)
+      },
+      {
+        key: 'lon',
+        value: String(city.lon)
+      }
+    );
+  }
+
+  const url = createUrl(API_URL, queryParams);
 
   const data = ref<WeatherApi>();
   const isLoading = ref<boolean>(true);

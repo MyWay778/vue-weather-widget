@@ -37,7 +37,7 @@ watch(cityInput, () => {
 
   selectedOption.value = undefined;
   options.value = [];
-  cityRequest.value = cityInput.value;
+  cityRequest.value = cityInput.value.trim();
 });
 
 const addCity = () => {

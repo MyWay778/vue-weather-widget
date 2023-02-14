@@ -59,7 +59,7 @@ const onInputFocus = () => {
 };
 
 const onUpdateModelValue = (value: string) => {
-  const saveText = sanitizeInput(value.trim(), excludedChars.cityInput);
+  const saveText = sanitizeInput(value, excludedChars.cityInput);
   emit('update:modelValue', saveText);
 };
 </script>
