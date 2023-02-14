@@ -4,14 +4,25 @@ import CelsiusUnitValue from '@UI/CelsiusUnitValue.vue';
 import CompassIcon from '../icons/CompassIcon.vue';
 import TitleUi from '@UI/TitleUi.vue';
 import WindArrow from '@UI/WindArrow.vue';
+import GeoIcon from '../icons/GeoIcon.vue';
 
 // eslint-disable-next-line vue/no-setup-props-destructure
-const { weather } = defineProps<{ weather: CityWeatherEntity }>();
+const { weather, currentPosition } = defineProps<{
+  weather: CityWeatherEntity;
+  currentPosition?: boolean;
+}>();
 </script>
 
 <template>
   <div :class="styles.header">
-    <TitleUi>{{ weather.name }}, {{ weather.country }}</TitleUi>
+    <TitleUi :class="styles.title"
+      >{{ weather.name }}, {{ weather.country }}
+      <GeoIcon
+        v-if="currentPosition"
+        :class="styles.geoIcon"
+        width="16"
+        height="16"
+    /></TitleUi>
   </div>
 
   <div :class="styles.tempBlock">
@@ -62,10 +73,24 @@ const { weather } = defineProps<{ weather: CityWeatherEntity }>();
 </template>
 
 <style module="styles" lang="scss">
+@import '@/styles/mixins.scss';
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  .title {
+    @include text-overflow;
+    padding-right: 20px;
+    position: relative;
+    max-width: 80%;
+  }
+
+  .geoIcon {
+    position: absolute;
+    right: 0;
+  }
 }
 
 .tempBlock {

@@ -1,4 +1,4 @@
-import { ref, watch, type Ref } from 'vue';
+import { inject, ref, watch, type Ref } from 'vue';
 import type CityEntity from '@/typings/models/CityEntity';
 import type { CityApi } from '@/typings/api/CityApi';
 import createUrl from '@/helpers/createUrl';
@@ -6,20 +6,24 @@ import makeCityId from '@/helpers/makeCityId';
 
 const API_URL = 'http://api.openweathermap.org/geo/1.0/direct';
 const LIMIT = '5';
-const API_KEY = 'd343b0b76a167af5f755356e611ca72f';
-
-const url = createUrl(API_URL, [
-  {
-    key: 'limit',
-    value: LIMIT
-  },
-  {
-    key: 'appid',
-    value: API_KEY
-  }
-]);
 
 export default function useFetchCityOptions(cityRequest: Ref<string>, delay = 1000) {
+  const apiKey = inject<string>('apiKey');
+  if (!apiKey) {
+    console.warn('useFetchCityOptions: api key was not injected!');
+  }
+
+  const url = createUrl(API_URL, [
+    {
+      key: 'limit',
+      value: LIMIT
+    },
+    {
+      key: 'appid',
+      value: apiKey ?? ''
+    }
+  ]);
+
   const options = ref<CityEntity[]>([]);
 
   const isLoading = ref(false);

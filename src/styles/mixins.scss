@@ -18,3 +18,9 @@
       color: var(--active);
     }
 }
+
+@mixin text-overflow {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

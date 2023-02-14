@@ -2,7 +2,7 @@
 import type CityEntity from '@/typings/models/CityEntity';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import InputUi, { type InputUiRef } from '@UI/InputUi.vue';
-import sanitizeInput, { dangerChars } from '@/helpers/sanitizeInput';
+import sanitizeInput, { excludedChars } from '@/helpers/sanitizeInput';
 
 export interface InputWithOptionsRef {
   focusInput: () => void;
@@ -59,7 +59,7 @@ const onInputFocus = () => {
 };
 
 const onUpdateModelValue = (value: string) => {
-  const saveText = sanitizeInput(value.trim(), dangerChars.safeText);
+  const saveText = sanitizeInput(value.trim(), excludedChars.cityInput);
   emit('update:modelValue', saveText);
 };
 </script>

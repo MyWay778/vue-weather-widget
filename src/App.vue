@@ -4,15 +4,40 @@ import ButtonWIthIcon from './components/UI/ButtonWIthIcon.vue';
 import CityPanel from './components/CityPanel/CityPanel.vue';
 import ModalUi from './components/UI/ModalUi.vue';
 import SettingsModal from './components/SettingsModal/SettingsModal.vue';
-import { ref, watch } from 'vue';
+import { provide, ref, watch } from 'vue';
 import type CityEntity from './typings/models/CityEntity';
 import { getStorage } from './helpers/getStorage';
+import makeCityId from './helpers/makeCityId';
+import getCurrentPosition from './helpers/getCurrentPosition';
 
-const STORAGE_KEY = 'weatherAppCities';
+const props = defineProps<{
+  apiKey: string;
+}>();
+
+provide('apiKey', props.apiKey);
+
+const STORAGE_KEY = 'weatherWidget';
 const cityStorage = getStorage<CityEntity[]>(STORAGE_KEY);
-
 const cityFromStorage = cityStorage.get({ isStringify: true }) ?? [];
+
 const cities = ref(cityFromStorage);
+
+// if cities is empty try to get current user position
+if (!cities.value.length) {
+  getCurrentPosition(pos => {
+    const { coords } = pos;
+    cities.value.push({
+      id: makeCityId(coords.latitude, coords.longitude),
+      name: '',
+      country: '',
+      lat: coords.latitude,
+      lon: coords.longitude,
+      currentPos: true
+    });
+  });
+}
+
+// save cities to storage
 watch(
   cities,
   () => {
@@ -35,7 +60,21 @@ const onRemoveCity = (cityId: string) => {
 };
 
 const onAddCity = (city: CityEntity): void => {
+  const foundCity = cities.value.find(c => c.id === city.id);
+  if (foundCity) {
+    return;
+  }
+
   cities.value.push(city);
+};
+
+const onUpdateCity = (city: CityEntity): void => {
+  const foundCity = cities.value.find(c => c.id === city.id);
+
+  if (foundCity) {
+    foundCity.name = city.name;
+    foundCity.country = city.country;
+  }
 };
 </script>
 
@@ -56,7 +95,8 @@ const onAddCity = (city: CityEntity): void => {
     <CityPanel
       v-for="city in cities"
       :key="city.id"
-      :city="city" />
+      :city="city"
+      @update-city="onUpdateCity" />
 
     <ModalUi
       v-if="isSettingsOpened"

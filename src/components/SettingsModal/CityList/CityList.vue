@@ -195,6 +195,8 @@ const onRemoveCity = (cityId: string): void => {
 </template>
 
 <style module="styles" lang="scss">
+@import '@/styles/mixins.scss';
+
 .cityList {
   position: relative;
   margin-top: 20px;
@@ -218,6 +220,7 @@ const onRemoveCity = (cityId: string): void => {
 
   &Trash {
     margin-left: auto;
+    flex-shrink: 0;
   }
 
   &.draggable {
@@ -239,6 +242,7 @@ const onRemoveCity = (cityId: string): void => {
 }
 
 .cityName {
+  @include text-overflow;
   user-select: none;
 }
 </style>

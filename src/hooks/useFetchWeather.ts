@@ -1,10 +1,10 @@
 import type CityEntity from '@/typings/models/CityEntity';
 import type WeatherApi from '@/typings/api/WeatherApi';
-import { ref, type Ref } from 'vue';
+import { inject, ref, type Ref } from 'vue';
+import createUrl from '@/helpers/createUrl';
 
 const API_URL = 'http://api.openweathermap.org/data/2.5/weather';
 const UNITS = 'metric';
-const API_KEY = 'd343b0b76a167af5f755356e611ca72f';
 
 export interface CityApiData {
   data: Ref<WeatherApi | undefined>;
@@ -13,10 +13,29 @@ export interface CityApiData {
 }
 
 export default function useFeatchWeather(city: CityEntity, minDelay = 0): CityApiData {
-  const url = new URL(API_URL);
-  url.searchParams.append('q', `${city.name},${city.country}`);
-  url.searchParams.append('units', UNITS);
-  url.searchParams.append('appid', API_KEY);
+  const apiKey = inject<string>('apiKey');
+  if (!apiKey) {
+    console.warn('useFeatchWeather: api key was not injected!');
+  }
+
+  const url = createUrl(API_URL, [
+    {
+      key: 'lat',
+      value: String(city.lat)
+    },
+    {
+      key: 'lon',
+      value: String(city.lon)
+    },
+    {
+      key: 'units',
+      value: UNITS
+    },
+    {
+      key: 'appid',
+      value: apiKey ?? ''
+    }
+  ]);
 
   const data = ref<WeatherApi>();
   const isLoading = ref<boolean>(true);

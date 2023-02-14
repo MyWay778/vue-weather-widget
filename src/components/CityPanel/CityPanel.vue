@@ -2,12 +2,27 @@
 import normalizeWeatherApi from '@/helpers/normalizeWeatherApi';
 import useFeatchWeather from '@/hooks/useFetchWeather';
 import type CityEntity from '@/typings/models/CityEntity';
-import { computed, reactive } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import WeatherDisplay from './WeatherDisplay.vue';
 import Loader from '@UI/LoaderUi.vue';
 
 const props = defineProps<{ city: CityEntity }>();
+const emit = defineEmits<{
+  (e: 'update-city', city: CityEntity): void;
+}>();
+
 const weatherResponse = reactive(useFeatchWeather(props.city, 1000));
+
+const isNeedCityUpdate = (): boolean => !props.city.name || !props.city.country;
+watch(weatherResponse, () => {
+  if (weatherResponse.data && isNeedCityUpdate()) {
+    emit('update-city', {
+      ...props.city,
+      name: weatherResponse.data.name,
+      country: weatherResponse.data.sys.country
+    });
+  }
+});
 
 const normalizedWeather = computed(() => {
   if (!weatherResponse.data) {
@@ -24,7 +39,8 @@ const normalizedWeather = computed(() => {
 
     <WeatherDisplay
       v-if="normalizedWeather"
-      :weather="normalizedWeather" />
+      :weather="normalizedWeather"
+      :current-position="city.currentPos" />
 
     <div
       v-if="weatherResponse.isError"

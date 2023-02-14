@@ -4,4 +4,5 @@ export default interface CityEntity {
   country: string;
   lat: number;
   lon: number;
+  currentPos?: boolean;
 }
