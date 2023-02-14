@@ -26,9 +26,8 @@ watch(isError, () => {
   }
 });
 
-watch(cityInput, (oldValue, newValue) => {
+watch(cityInput, () => {
   message.value = '';
-  console.log('cityInput', oldValue, newValue);
   // if the user selects an option, nothing needs to be done,
   // otherwise reset the values and request new options
   if (isOptionSelected) {

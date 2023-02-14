@@ -5,11 +5,12 @@ import sanitizeInput, { excludedChars } from './helpers/sanitizeInput';
 import './styles/main.scss';
 
 const ELEMENT_NAME = 'weather-widget';
+const rootStyles = 'display:inline-block;';
 
 initApp();
 
 function initApp() {
-  const root = document.querySelector(ELEMENT_NAME);
+  const root = document.querySelector<HTMLElement>(ELEMENT_NAME);
   if (!root) return;
 
   if (customElements.get(ELEMENT_NAME)) {
@@ -22,6 +23,8 @@ function initApp() {
     console.warn('Weather Widget: You need to define an api-key attribute!');
     return;
   }
+
+  root.style.cssText = rootStyles;
 
   apiKey = sanitizeInput(apiKey, excludedChars.safeText);
 

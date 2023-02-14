@@ -114,8 +114,6 @@ const onUpdateCity = (city: CityEntity): void => {
 @import '@/styles/mixins.scss';
 
 .widgetContainer {
-  margin: 100px;
-
   position: relative;
   display: flex;
   flex-direction: column;
