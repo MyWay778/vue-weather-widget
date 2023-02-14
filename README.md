@@ -1,27 +1,35 @@
 # vue-weather-widget
 
-This template should help get you started developing with Vue 3 in Vite.
+Weather Widget
 
-## Recommended IDE Setup
+### Technology stack 
+* Vue3 (Composition API)
+* TypeScript
+* Vite
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+### Features
+* Requests your current position.
+* Can show the weather in three cities.
+* You can change the order of the cities.
+* Stores in the browser's local storage.
 
-## Type Support for `.vue` Imports in TS
+## Usage
+1) Download the dist file (weather-widget.js)
+2) Add the widget and script tags in your index.html
+    ```html
+    <script src="/weather-widget.js"></script>
+    <weather-widget></weather-widget>
+    ```
+3) Set api-key attribute
+    ```html
+    <weather-widget api-key={your api key}></weather-widget>
+    ```
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+To get an API key, you need to register with [OpenWeather](https://openweathermap.org/). You need a free key. Or you can use mine :)
+```sh
+d343b0b76a167af5f755356e611ca72f
+```
+## Development setup
 
 ```sh
 npm install
@@ -33,7 +41,7 @@ npm install
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Create dist
 
 ```sh
 npm run build
