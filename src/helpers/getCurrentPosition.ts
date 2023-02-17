@@ -3,6 +3,9 @@ const options = {
   maximumAge: Infinity
 };
 
-export default function getCurrentPosition(callback: (pos: GeolocationPosition) => void) {
-  navigator.geolocation.getCurrentPosition(callback, null, options);
+export default function getCurrentPosition(
+  callback: (pos: GeolocationPosition) => void,
+  errorCallback?: (error: GeolocationPositionError) => void
+) {
+  navigator.geolocation.getCurrentPosition(callback, errorCallback, options);
 }

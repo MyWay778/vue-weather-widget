@@ -4,6 +4,8 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
 
+const packageVersion = process.env.npm_package_version;
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), cssInjectedByJsPlugin()],
@@ -19,7 +21,7 @@ export default defineConfig({
     rollupOptions: {
       input: './src/main.ts',
       output: {
-        entryFileNames: 'weather-widget-[hash].js'
+        entryFileNames: `weather-widget-v${packageVersion}.js`
       }
     }
   }

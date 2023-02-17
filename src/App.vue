@@ -4,7 +4,8 @@ import { SettingsIcon } from '@/components/icons';
 import { ButtonWIthIcon, ModalUi } from '@/components/ui';
 import { CityPanel } from '@/components/weather/';
 import { SettingsModal } from '@/components/settings/';
-import { getStorage, makeCityId, getCurrentPosition } from '@/helpers/';
+import { getStorage } from '@/helpers/';
+import { addOrUpdateCurrentCity } from '@/logic/app';
 import type CityEntity from '@/typings/models/CityEntity';
 
 const STORAGE_KEY = 'weatherWidget';
@@ -12,30 +13,14 @@ const cityStorage = getStorage<CityEntity[]>(STORAGE_KEY);
 const cityFromStorage = cityStorage.get({ isStringify: true }) ?? [];
 
 const cities = ref(cityFromStorage);
+watch(cities, newCities => {
+  cityStorage.save(newCities);
+});
 
-// if cities is empty try to get current user position
-if (!cities.value.length) {
-  getCurrentPosition(pos => {
-    const { coords } = pos;
-    cities.value.push({
-      id: makeCityId(coords.latitude, coords.longitude),
-      name: '',
-      country: '',
-      lat: coords.latitude,
-      lon: coords.longitude,
-      currentPos: true
-    });
-  });
-}
+const currentCityIndex = cities.value.findIndex(c => c.currentPos);
 
-// save cities to storage
-watch(
-  cities,
-  () => {
-    cityStorage.save(cities.value);
-  },
-  { deep: true }
-);
+// get new or update user current position
+addOrUpdateCurrentCity(cities, currentCityIndex);
 
 const isSettingsOpened = ref(false);
 const clickOnSettingsHandler = () => {
@@ -56,7 +41,7 @@ const onAddCity = (city: CityEntity): void => {
     return;
   }
 
-  cities.value.push(city);
+  cities.value = cities.value.concat(city);
 };
 
 const onUpdateCity = (city: CityEntity): void => {
