@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import TitleUi from '@UI/TitleUi.vue';
-import ArrowLeftIcon from '../../icons/ArrowLeftIcon.vue';
-import ButtonWIthIcon from '@UI/ButtonWIthIcon.vue';
-import InputWithOptions, { type InputWithOptionsRef } from './InputWithOptions.vue';
 import { computed, ref, watch } from 'vue';
-import useFetchCityOptions from '@/hooks/useFetchCityOptions';
+import { TitleUi, ButtonWIthIcon } from '@/components/ui/';
+import { ArrowLeftIcon } from '@/components/icons/';
+import { InputWithOptions, type InputWithOptionsRef } from '@/components/settings/addCityForm';
+import { useFetchCityOptions } from '@/composables/';
 import type CityEntity from '@/typings/models/CityEntity';
 
 const emit = defineEmits<{

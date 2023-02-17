@@ -1,10 +1,7 @@
 <script setup lang="ts">
+import { CelsiusUnitValue, TitleUi, WindArrow } from '@/components/ui/';
+import { CompassIcon, GeoIcon } from '@/components/icons/';
 import type CityWeatherEntity from '@/typings/models/CityWeatherEntity';
-import CelsiusUnitValue from '@UI/CelsiusUnitValue.vue';
-import CompassIcon from '../icons/CompassIcon.vue';
-import TitleUi from '@UI/TitleUi.vue';
-import WindArrow from '@UI/WindArrow.vue';
-import GeoIcon from '../icons/GeoIcon.vue';
 
 // eslint-disable-next-line vue/no-setup-props-destructure
 const { weather, currentPosition } = defineProps<{

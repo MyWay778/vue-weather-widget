@@ -1,4 +1,4 @@
-export function getStorage<T>(storageKey: string) {
+export default function getStorage<T>(storageKey: string) {
   const storage = window.localStorage;
 
   return {

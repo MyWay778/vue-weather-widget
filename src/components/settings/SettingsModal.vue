@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TitleUi from '@UI/TitleUi.vue';
-import CityList from './CityList/CityList.vue';
-import AddCityForm from './AddCityForm/AddCityForm.vue';
-import type CityEntity from '@/typings/models/CityEntity';
 import { computed } from 'vue';
+import { TitleUi } from '@/components/ui/';
+import { CityList } from '@/components/settings/cityList/';
+import { AddCityForm } from '@/components/settings/addCityForm/';
+import type CityEntity from '@/typings/models/CityEntity';
 
 const MAX_CITIES = 3;
 

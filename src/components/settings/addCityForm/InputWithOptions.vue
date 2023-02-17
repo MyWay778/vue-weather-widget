@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type CityEntity from '@/typings/models/CityEntity';
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
-import InputUi, { type InputUiRef } from '@UI/InputUi.vue';
-import sanitizeInput, { excludedChars } from '@/helpers/sanitizeInput';
+import { InputUi, type InputUiRef } from '@/components/ui/';
+import { sanitizeInput, excludedChars } from '@/helpers/';
+import type CityEntity from '@/typings/models/CityEntity';
 
 export interface InputWithOptionsRef {
   focusInput: () => void;

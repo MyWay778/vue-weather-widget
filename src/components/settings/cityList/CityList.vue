@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import setElementTransform from '@/helpers/setElementTransform';
-import swapArrayItems from '@/helpers/swapArrayItems';
-import type CityEntity from '@/typings/models/CityEntity';
 import { ref, watchEffect } from 'vue';
-import HamburgerIcon from '@/components/icons/HamburgerIcon.vue';
-import TrashIcon from '../../icons/TrashIcon.vue';
-import ButtonWIthIcon from '@UI/ButtonWIthIcon.vue';
+import { setElementTransform, swapArrayItems } from '@/helpers/';
+import { HamburgerIcon, TrashIcon } from '@/components/icons/';
+import { ButtonWIthIcon } from '@/components/ui/';
+import type CityEntity from '@/typings/models/CityEntity';
 
 const props = defineProps<{ cities: CityEntity[] }>();
 const emit = defineEmits<{

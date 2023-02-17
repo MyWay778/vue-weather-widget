@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import normalizeWeatherApi from '@/helpers/normalizeWeatherApi';
-import useFeatchWeather from '@/hooks/useFetchWeather';
-import type CityEntity from '@/typings/models/CityEntity';
 import { computed, reactive, watch } from 'vue';
-import WeatherDisplay from './WeatherDisplay.vue';
-import Loader from '@UI/LoaderUi.vue';
+import { normalizeWeatherApi } from '@/helpers/';
+import { useFetchWeather } from '@/composables/';
+import { WeatherDisplay } from '@/components/weather';
+import { LoaderUi as Loader } from '@/components/ui/';
+import type CityEntity from '@/typings/models/CityEntity';
 
 const props = defineProps<{ city: CityEntity }>();
 const emit = defineEmits<{
   (e: 'update-city', city: CityEntity): void;
 }>();
 
-const weatherResponse = reactive(useFeatchWeather(props.city, 1000));
+const weatherResponse = reactive(useFetchWeather(props.city, 1000));
 
 const isNeedCityUpdate = (): boolean => !props.city.name || !props.city.country;
 watch(weatherResponse, () => {

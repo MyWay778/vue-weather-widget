@@ -1,20 +1,11 @@
 <script setup lang="ts">
-import SettingsIcon from './components/icons/SettingIcon.vue';
-import ButtonWIthIcon from './components/UI/ButtonWIthIcon.vue';
-import CityPanel from './components/CityPanel/CityPanel.vue';
-import ModalUi from './components/UI/ModalUi.vue';
-import SettingsModal from './components/SettingsModal/SettingsModal.vue';
-import { provide, ref, watch } from 'vue';
-import type CityEntity from './typings/models/CityEntity';
-import { getStorage } from './helpers/getStorage';
-import makeCityId from './helpers/makeCityId';
-import getCurrentPosition from './helpers/getCurrentPosition';
-
-const props = defineProps<{
-  apiKey: string;
-}>();
-
-provide('apiKey', props.apiKey);
+import { ref, watch } from 'vue';
+import { SettingsIcon } from '@/components/icons';
+import { ButtonWIthIcon, ModalUi } from '@/components/ui';
+import { CityPanel } from '@/components/weather/';
+import { SettingsModal } from '@/components/settings/';
+import { getStorage, makeCityId, getCurrentPosition } from '@/helpers/';
+import type CityEntity from '@/typings/models/CityEntity';
 
 const STORAGE_KEY = 'weatherWidget';
 const cityStorage = getStorage<CityEntity[]>(STORAGE_KEY);
