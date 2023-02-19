@@ -2,7 +2,7 @@
 import { ref, watchEffect } from 'vue';
 import { setElementTransform, swapArrayItems } from '@/helpers/';
 import { HamburgerIcon, TrashIcon } from '@/components/icons/';
-import { ButtonWIthIcon } from '@/components/ui/';
+import { IconButton } from '@/components/ui/';
 import type CityEntity from '@/typings/models/CityEntity';
 
 const props = defineProps<{ cities: CityEntity[] }>();
@@ -182,11 +182,11 @@ const onRemoveCity = (cityId: string): void => {
 
         <span :class="styles.cityName">{{ city.name }}, {{ city.country }}</span>
 
-        <ButtonWIthIcon
+        <IconButton
           :class="styles.cityItemTrash"
           @click="onRemoveCity(city.id)">
           <TrashIcon />
-        </ButtonWIthIcon>
+        </IconButton>
       </div>
     </li>
   </ul>

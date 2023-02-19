@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CloseIcon from '../icons/CloseIcon.vue';
-import ButtonWIthIcon from './ButtonWIthIcon.vue';
+import ButtonWIthIcon from './IconButton.vue';
 </script>
 
 <template>

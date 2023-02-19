@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { TitleUi, ButtonWIthIcon } from '@/components/ui/';
+import { TitleUi, IconButton } from '@/components/ui/';
 import { ArrowLeftIcon } from '@/components/icons/';
 import { InputWithOptions, type InputWithOptionsRef } from '@/components/settings/addCityForm';
 import { useFetchCityOptions } from '@/composables/';
@@ -21,7 +21,7 @@ let isSubmitDisabled = computed(() => !selectedOption.value);
 
 watch(isError, () => {
   if (isError.value) {
-    message.value = 'Request faild.';
+    message.value = 'Request failed.';
   }
 });
 
@@ -106,11 +106,11 @@ const onEnterDown = () => {
         inputType="search"
         placeholder="Enter city..." />
 
-      <ButtonWIthIcon
+      <IconButton
         :class="[styles.arrowBtn, { [styles.disabled]: isSubmitDisabled }]"
         @click="onSubmit">
         <ArrowLeftIcon />
-      </ButtonWIthIcon>
+      </IconButton>
     </div>
 
     <div

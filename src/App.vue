@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { SettingsIcon } from '@/components/icons';
-import { ButtonWIthIcon, ModalUi } from '@/components/ui';
 import { CityPanel } from '@/components/weather/';
 import { SettingsModal } from '@/components/settings/';
 import { getStorage } from '@/helpers/';
 import { addOrUpdateCurrentCity } from '@/logic/app';
+import { DefaultHomeMessage, SettingsButton, AppContainer } from '@/components/home/';
+import { ModalUi } from './components/ui';
 import type CityEntity from '@/typings/models/CityEntity';
 
 const STORAGE_KEY = 'weatherWidget';
@@ -55,18 +55,10 @@ const onUpdateCity = (city: CityEntity): void => {
 </script>
 
 <template>
-  <div :class="styles.widgetContainer">
-    <ButtonWIthIcon
-      :class="styles.settingsBtn"
-      @click="clickOnSettingsHandler">
-      <SettingsIcon />
-    </ButtonWIthIcon>
+  <AppContainer>
+    <SettingsButton @click="clickOnSettingsHandler" />
 
-    <div
-      v-if="!cities.length"
-      :class="styles.message">
-      Click on <SettingsIcon :class="styles.messageIcon" /> to add a city!
-    </div>
+    <DefaultHomeMessage v-if="!cities.length" />
 
     <CityPanel
       v-for="city in cities"
@@ -83,51 +75,5 @@ const onUpdateCity = (city: CityEntity): void => {
         @remove-city="onRemoveCity"
         @add-city="onAddCity" />
     </ModalUi>
-  </div>
+  </AppContainer>
 </template>
-
-<style module="styles" lang="scss">
-@import '@/styles/mixins.scss';
-
-.widgetContainer {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  row-gap: 50px;
-  width: 260px;
-  min-height: var(--widget-min-height);
-  padding: 20px;
-  border-radius: var(--border-radius);
-  background-color: var(--white);
-  box-shadow: 2px 2px 5px 2px var(--shadow);
-}
-
-.settingsBtn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1;
-
-  &:hover {
-    svg {
-      transform: rotate(45deg);
-    }
-  }
-
-  svg {
-    transition: 0.5s;
-  }
-}
-
-.message {
-  @include absolute-center;
-  text-align: center;
-  font-size: 18px;
-
-  &Icon {
-    width: 18px;
-    height: 18px;
-    vertical-align: middle;
-  }
-}
-</style>

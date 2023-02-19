@@ -1,4 +1,4 @@
-export { default as ButtonWIthIcon } from './ButtonWIthIcon.vue';
+export { default as IconButton } from './IconButton.vue';
 export { default as CelsiusUnitValue } from './CelsiusUnitValue.vue';
 export { default as InputUi, type InputUiRef } from './InputUi.vue';
 export { default as LoaderUi } from './LoaderUi.vue';
