@@ -5,7 +5,7 @@ import { SettingsModal } from '@/components/settings/';
 import { getStorage } from '@/helpers/';
 import { addOrUpdateCurrentCity } from '@/logic/app';
 import { DefaultHomeMessage, SettingsButton, AppContainer } from '@/components/home/';
-import { ModalUi } from './components/ui';
+import { ModalUi } from '@/components/ui';
 import type CityEntity from '@/typings/models/CityEntity';
 
 const STORAGE_KEY = 'weatherWidget';
@@ -45,11 +45,10 @@ const onAddCity = (city: CityEntity): void => {
 };
 
 const onUpdateCity = (city: CityEntity): void => {
-  const foundCity = cities.value.find(c => c.id === city.id);
+  const foundCityIndex = cities.value.findIndex(c => c.id === city.id);
 
-  if (foundCity) {
-    foundCity.name = city.name;
-    foundCity.country = city.country;
+  if (foundCityIndex > -1) {
+    cities.value[foundCityIndex] = city;
   }
 };
 </script>

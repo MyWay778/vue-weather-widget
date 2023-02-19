@@ -13,6 +13,7 @@ module.exports = {
     ecmaVersion: 'latest'
   },
   rules: {
-    quotes: ['error', 'single']
+    quotes: ['error', 'single'],
+    'no-console': ['error', { allow: ['warn'] }]
   }
 };

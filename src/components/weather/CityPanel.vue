@@ -1,36 +1,39 @@
 <script setup lang="ts">
-import { computed, reactive, watch } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { normalizeWeatherApi } from '@/helpers/';
 import { useFetchWeather } from '@/composables/';
 import { WeatherDisplay } from '@/components/weather';
 import { LoaderUi as Loader } from '@/components/ui/';
-import type CityEntity from '@/typings/models/CityEntity';
+import type { CityEntity, CityWeatherEntity } from '@/typings/models/';
 
 const props = defineProps<{ city: CityEntity }>();
 const emit = defineEmits<{
   (e: 'update-city', city: CityEntity): void;
 }>();
 
-const weatherResponse = reactive(useFetchWeather(props.city, 1000));
+const MIN_RESPONSE_DURATION = 1000;
 
-const isNeedCityUpdate = (): boolean => !props.city.name || !props.city.country;
+const weatherResponse = reactive(useFetchWeather(props.city, MIN_RESPONSE_DURATION));
 watch(weatherResponse, () => {
-  if (weatherResponse.data && isNeedCityUpdate()) {
-    emit('update-city', {
-      ...props.city,
-      name: weatherResponse.data.name,
-      country: weatherResponse.data.sys.country
-    });
+  // if weather response is successful
+  if (weatherResponse.data) {
+    normalizedWeather.value = normalizeWeatherApi(weatherResponse.data);
+
+    if (isNeedCityUpdate()) {
+      emit('update-city', {
+        ...props.city,
+        name: weatherResponse.data.name,
+        country: weatherResponse.data.sys.country
+      });
+    }
   }
 });
 
-const normalizedWeather = computed(() => {
-  if (!weatherResponse.data) {
-    return;
-  }
+// if the city does not have a name or country, this can happen when we get the city from geolocation
+const isNeedCityUpdate = (): boolean => !props.city.name || !props.city.country;
 
-  return normalizeWeatherApi(weatherResponse.data);
-});
+// normalized weather data for rendering
+const normalizedWeather = ref<CityWeatherEntity>();
 </script>
 
 <template>

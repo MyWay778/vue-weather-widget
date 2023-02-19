@@ -21,7 +21,7 @@ const onAddCity = (city: CityEntity): void => {
   emit('addCity', city);
 };
 
-const isShowAddCityForm = computed(() => props.cities.length < MAX_CITIES);
+const isShownAddCityForm = computed(() => props.cities.length < MAX_CITIES);
 </script>
 
 <template>
@@ -33,7 +33,7 @@ const isShowAddCityForm = computed(() => props.cities.length < MAX_CITIES);
     @remove-city="$emit('removeCity', $event)" />
 
   <AddCityForm
-    v-if="isShowAddCityForm"
+    v-if="isShownAddCityForm"
     @add-city="onAddCity" />
 
   <div

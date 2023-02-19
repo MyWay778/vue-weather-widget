@@ -109,7 +109,7 @@ const dragHandler = (event: MouseEvent) => {
       // after changing the order of the elements, the active element is set to the place of the target element,
       // but the active element can be shifted from the target, and we need to get this offset
       const actualX = activeRect.x - targetRect.x + scaleXDiff;
-      // nitialX - the current mouse position without the x offset of the active element
+      // initialX - the current mouse position without the x offset of the active element
       initialX = event.x - actualX;
 
       const scaleYDiff = getScaleDiff(activeRect.height);

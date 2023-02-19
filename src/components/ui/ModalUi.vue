@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import CloseIcon from '../icons/CloseIcon.vue';
-import ButtonWIthIcon from './IconButton.vue';
+import { CloseIcon } from '@/components/icons/';
+import { IconButton } from '@/components/ui';
+
+defineEmits<{
+  (e: 'closeModal'): void;
+}>();
 </script>
 
 <template>
   <aside :class="styles.modal">
-    <ButtonWIthIcon
+    <IconButton
       :class="styles.close"
       @click="$emit('closeModal')">
       <CloseIcon />
-    </ButtonWIthIcon>
+    </IconButton>
 
     <slot />
   </aside>

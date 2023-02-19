@@ -6,16 +6,16 @@ import createUrl from '@/helpers/createUrl';
 const API_URL = 'http://api.openweathermap.org/data/2.5/weather';
 const UNITS = 'metric';
 
-export interface CityApiData {
+export interface WeatherResponse {
   data: Ref<WeatherApi | undefined>;
   isLoading: Ref<boolean>;
   isError: Ref<boolean>;
 }
 
-export default function useFeatchWeather(city: CityEntity, minDelay = 0): CityApiData {
+export default function useFetchWeather(city: CityEntity, minDuration = 0): WeatherResponse {
   const apiKey = inject<string>('apiKey');
   if (!apiKey) {
-    console.warn('useFeatchWeather: api key was not injected!');
+    console.warn('useFetchWeather: api key was not injected!');
   }
 
   const queryParams = [
@@ -29,12 +29,14 @@ export default function useFeatchWeather(city: CityEntity, minDelay = 0): CityAp
     }
   ];
 
+  // if cityEntity has name and country request by them
   if (city.name && city.country) {
     queryParams.push({
       key: 'q',
       value: `${city.name},${city.country}`
     });
   } else {
+    // or search by latitude and longitude
     queryParams.push(
       {
         key: 'lat',
@@ -53,7 +55,8 @@ export default function useFeatchWeather(city: CityEntity, minDelay = 0): CityAp
   const isLoading = ref<boolean>(true);
   const isError = ref<boolean>(false);
 
-  const startTime = Date.now();
+  // if minimum duration is set, get the time now
+  const startTime = minDuration ? Date.now() : 0;
 
   const setData = (json: WeatherApi) => {
     data.value = json;
@@ -68,18 +71,19 @@ export default function useFeatchWeather(city: CityEntity, minDelay = 0): CityAp
       return response.json() as Promise<WeatherApi>;
     })
     .then(json => {
-      const endTime = Date.now();
+      const endTime = minDuration ? Date.now() : 0;
       const timeDiff = endTime - startTime;
-      if (minDelay && timeDiff < minDelay) {
+
+      if (minDuration && timeDiff < minDuration) {
         setTimeout(() => {
           setData(json);
-        }, minDelay - timeDiff);
+        }, minDuration - timeDiff);
       } else {
         setData(json);
       }
     })
     .catch(error => {
-      console.warn('useFeatchWeather:', error);
+      console.warn('useFetchWeather:', error);
       isError.value = true;
       isLoading.value = false;
     });

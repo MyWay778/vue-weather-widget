@@ -1,11 +1,14 @@
-import type CityWeatherEntity from '@/typings/models/CityWeatherEntity';
-import type WeatherApi from '@/typings/api/WeatherApi';
-import capitalizeFirstLetter from './capitalizeFirstLetter';
-import changeNumberPrecision from './changeNumberPrecision';
-import convertMetersToKm from './convertMetersToKm';
-import getIconUrl from './getIconUrl';
-import getWindDirection from './getWindDirection';
+import type { CityWeatherEntity } from '@/typings/models/';
+import type { WeatherApi } from '@/typings/api/';
+import {
+  capitalizeFirstLetter,
+  changeNumberPrecision,
+  convertMetersToKm,
+  getIconUrl,
+  getWindDirection
+} from '@/helpers/';
 
+// normalize weather api data response for rendering
 export default function normalizeWeatherApi(weatherData: WeatherApi): CityWeatherEntity {
   return {
     id: weatherData.sys.id,
