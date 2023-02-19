@@ -17,7 +17,7 @@ watchEffect(() => {
 });
 
 const list = ref<HTMLElement>();
-let listReact: DOMRect | null = null;
+let listRect: DOMRect | null = null;
 
 const TRANSFORM_SCALE = 1.03;
 const items = ref<HTMLElement[]>([]);
@@ -39,7 +39,7 @@ const dragStartHandler = (event: MouseEvent, index: number) => {
   activeIndex.value = index;
 
   if (list.value) {
-    listReact = list.value.getBoundingClientRect();
+    listRect = list.value.getBoundingClientRect();
   }
 
   // make active element visually active
@@ -60,7 +60,7 @@ const dragHandler = (event: MouseEvent) => {
   // get position of activeEl(draggable)
   const activeRect = activeEl.getBoundingClientRect();
 
-  // loop through elements to find intersection with activeEl(dragabble)
+  // loop through elements to find intersection with activeEl(draggable)
   items.value.forEach((target, targetIndex) => {
     if (target === activeEl) return;
 
@@ -75,7 +75,7 @@ const dragHandler = (event: MouseEvent) => {
     function activeBelowTarget(): boolean {
       return (
         // eslint-disable-next-line prettier/prettier
-        activeIndex.value < targetIndex &&
+        activeIndex.value < targetIndex && // active el was before target in items array
         targetRect.top < activeRect.top &&
         targetRect.bottom < activeRect.bottom
       );
@@ -84,8 +84,8 @@ const dragHandler = (event: MouseEvent) => {
     function activeAboveTarget(): boolean {
       return (
         // eslint-disable-next-line prettier/prettier
-        activeIndex.value > targetIndex && 
-        targetRect.top > activeRect.top && 
+        activeIndex.value > targetIndex && // active el was after target in items array
+        targetRect.top > activeRect.top &&
         targetRect.bottom > activeRect.bottom
       );
     }
@@ -132,14 +132,14 @@ const dragHandler = (event: MouseEvent) => {
   }
 
   function activeIsOutOfBounds(): boolean {
-    if (!listReact) return false;
+    if (!listRect) return false;
 
     return (
       // eslint-disable-next-line prettier/prettier
-      listReact.left > activeRect.right || 
-      listReact.top > activeRect.bottom ||
-      listReact.right < activeRect.left ||
-      listReact.bottom < activeRect.top
+      listRect.left > activeRect.right || 
+      listRect.top > activeRect.bottom ||
+      listRect.right < activeRect.left ||
+      listRect.bottom < activeRect.top
     );
   }
 };
