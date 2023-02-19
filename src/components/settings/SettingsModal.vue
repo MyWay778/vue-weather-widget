@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { TitleUi } from '@/components/ui/';
-import { CityList } from '@/components/settings/cityList/';
+import CityList from '@/components/settings/cityList/CityListV2.vue';
 import { AddCityForm } from '@/components/settings/addCityForm/';
 import type CityEntity from '@/typings/models/CityEntity';
 
