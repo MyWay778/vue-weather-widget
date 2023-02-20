@@ -3,7 +3,7 @@ import { ref, watch } from 'vue';
 import { CityPanel } from '@/components/weather/';
 import { SettingsModal } from '@/components/settings/';
 import { getStorage } from '@/helpers/';
-import { addOrUpdateCurrentCity } from '@/logic/app';
+import { addOrUpdateCurrentCity } from '@/modules/app';
 import { DefaultHomeMessage, SettingsButton, AppContainer } from '@/components/home/';
 import { ModalUi } from '@/components/ui';
 import type CityEntity from '@/typings/models/CityEntity';

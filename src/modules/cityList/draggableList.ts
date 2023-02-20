@@ -1,24 +1,27 @@
 import { setElementTransform, swapArrayItems } from '@/helpers';
 
-export default function useDraggableList(
+export default function draggableList(
   list: HTMLElement,
   items: HTMLElement[],
   onChange: (oldItemIndex: number, newItemIndex: number) => void,
   options: { scale: number } = { scale: 1.03 }
 ) {
+  if (!list || !items.length) {
+    console.warn('draggableList: list elements or items elements are undefined!');
+    return;
+  }
+
   const { scale } = options;
 
   let initialX = 0;
   let initialY = 0;
 
-  const listRect: DOMRect = list.getBoundingClientRect();
-
   let activeEl: HTMLElement | null = null;
   let activeIndex = -1;
 
-  const onDragStart = (event: MouseEvent, index: number) => {
-    if (!items.length) return;
+  const listRect: DOMRect = list.getBoundingClientRect();
 
+  const onDragStart = (event: MouseEvent, index: number) => {
     initialX = event.x;
     initialY = event.y;
 
@@ -32,7 +35,7 @@ export default function useDraggableList(
   };
 
   const onDrag = (event: MouseEvent) => {
-    if (!activeEl || !items.length) return;
+    if (!activeEl) return;
 
     const x = event.x - initialX;
     const y = event.y - initialY;
@@ -76,8 +79,11 @@ export default function useDraggableList(
 
       function swapActiveAndTarget(): void {
         items = swapArrayItems(items, activeIndex, targetIndex);
+
+        // notify onChange listener, activeIndex === oldIndex, targetIndex === newIndex
         onChange(activeIndex, targetIndex);
 
+        // update index of active element
         activeIndex = targetIndex;
 
         // by changing the order of the elements, we need to update the position of the active element
@@ -90,7 +96,7 @@ export default function useDraggableList(
         // we are using scaling in the transform that resizes the element, so we need to resolve this difference
         const scaleXDiff = getScaleDiff(activeRect.width);
         // after changing the order of the elements, the active element is set to the place of the target element,
-        // but the active element can be shifted from the target, and we need to get this offset
+        // but the active element can be shifted from the target, and we need to get this shift offset
         const actualX = activeRect.x - targetRect.x + scaleXDiff;
         // initialX - the current mouse position without the x offset of the active element
         initialX = event.x - actualX;
@@ -104,8 +110,8 @@ export default function useDraggableList(
       }
 
       function getScaleDiff(size: number): number {
-        const RECTANGLE_SIDES = 2;
-        return (size - size / scale) / RECTANGLE_SIDES;
+        const RECTANGLE_PARALLEL_SIDES = 2;
+        return (size - size / scale) / RECTANGLE_PARALLEL_SIDES;
       }
     });
 
