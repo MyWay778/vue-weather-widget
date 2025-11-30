@@ -95,7 +95,7 @@ const onUpdateModelValue = (value: string) => {
 </template>
 
 <style module="styles" lang="scss">
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss';
 
 .container {
   position: relative;
@@ -131,7 +131,7 @@ const onUpdateModelValue = (value: string) => {
 }
 
 .button {
-  @include common-button;
+  @include mixins.common-button;
   text-align: left;
 }
 </style>

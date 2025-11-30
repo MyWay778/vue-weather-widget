@@ -5,10 +5,10 @@ import { SettingsIcon } from '@/components/icons/';
   <p :class="styles.message">Click on <SettingsIcon :class="styles.messageIcon" /> to add a city!</p>
 </template>
 <style module="styles" lang="scss">
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss';
 
 .message {
-  @include absolute-center;
+  @include mixins.absolute-center;
   text-align: center;
   font-size: 18px;
 

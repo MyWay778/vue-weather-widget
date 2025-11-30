@@ -54,7 +54,7 @@ const normalizedWeather = ref<CityWeatherEntity>();
 </template>
 
 <style module="styles" lang="scss">
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss';
 
 .cityPanel {
   position: relative;
@@ -62,7 +62,7 @@ const normalizedWeather = ref<CityWeatherEntity>();
 }
 
 .errorMessage {
-  @include absolute-center;
+  @include mixins.absolute-center;
 
   width: 100%;
   text-align: center;

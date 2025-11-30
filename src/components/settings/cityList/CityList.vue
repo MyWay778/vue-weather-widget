@@ -84,7 +84,7 @@ const onRemoveCity = (cityId: string): void => {
 </template>
 
 <style module="styles" lang="scss">
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss';
 
 .cityList {
   position: relative;
@@ -131,7 +131,7 @@ const onRemoveCity = (cityId: string): void => {
 }
 
 .cityName {
-  @include text-overflow;
+  @include mixins.text-overflow;
   user-select: none;
 }
 </style>

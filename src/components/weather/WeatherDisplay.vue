@@ -70,7 +70,7 @@ const { weather, currentPosition } = defineProps<{
 </template>
 
 <style module="styles" lang="scss">
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss';
 
 .header {
   display: flex;
@@ -78,7 +78,7 @@ const { weather, currentPosition } = defineProps<{
   align-items: center;
 
   .title {
-    @include text-overflow;
+    @include mixins.text-overflow;
     padding-right: 20px;
     position: relative;
     max-width: 80%;

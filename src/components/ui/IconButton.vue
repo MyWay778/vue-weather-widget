@@ -9,10 +9,10 @@
 </template>
 
 <style module="styles" lang="scss">
-@import '@/styles/mixins.scss';
+@use '@/styles/mixins.scss';
 
 .button {
-  @include common-button;
+  @include mixins.common-button;
   width: 20px;
   height: 20px;
 }
