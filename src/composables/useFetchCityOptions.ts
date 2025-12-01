@@ -8,7 +8,7 @@ const API_URL = 'http://api.openweathermap.org/geo/1.0/direct';
 const LIMIT = '5';
 
 export default function useFetchCityOptions(cityRequest: Ref<string>, delay = 1000) {
-  const apiKey = inject<string>('apiKey');
+  const apiKey = inject<string>('api-key');
   if (!apiKey) {
     console.warn('useFetchCityOptions: api key was not injected!');
   }

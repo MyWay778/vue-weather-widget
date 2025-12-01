@@ -1,39 +1,15 @@
-import { createApp } from 'vue';
+import { defineCustomElement } from 'vue';
 import App from '@/App.vue';
-import { sanitizeInput, excludedChars, setStyles } from '@/helpers';
 
-const ROOT_NAME = 'weather-widget';
-const rootStyles: Partial<CSSStyleDeclaration> = { display: 'inline-block' };
-
-initApp();
-
-function initApp() {
-  const root = document.querySelector<HTMLElement>(ROOT_NAME);
-  if (!root) return;
-
-  // check if a custom element with root name already exists
-  if (customElements.get(ROOT_NAME)) {
-    console.warn('Weather Widget: The weather-widget tag is reserved!');
-    return;
-  }
-
-  // api key for requests from API
-  let apiKey = root.getAttribute('api-key');
-  if (!apiKey) {
-    console.warn('Weather Widget: You need to define an api-key attribute!');
-    return;
-  }
-
-  // styling root element
-  setStyles(root, rootStyles);
-
-  // exclude potentially dangerous characters from api key
-  apiKey = sanitizeInput(apiKey, excludedChars.safeText);
-
-  const app = createApp(App);
-
-  // provide apiKey for useFetch functions
-  app.provide('apiKey', apiKey);
-
-  app.mount(root);
+const serviceApiKey = import.meta.env.VITE_WEATHER_SERVICE_API_KEY;
+if (!serviceApiKey) {
+  throw new Error('Weather Service Api key was not defined!');
 }
+
+const customElementApp = defineCustomElement(App, {
+  configureApp(app) {
+    app.provide('api-key', serviceApiKey);
+  }
+});
+
+customElements.define('weather-widget', customElementApp);

@@ -13,7 +13,7 @@ export interface WeatherResponse {
 }
 
 export default function useFetchWeather(city: CityEntity, minDuration = 0): WeatherResponse {
-  const apiKey = inject<string>('apiKey');
+  const apiKey = inject<string>('api-key');
   if (!apiKey) {
     console.warn('useFetchWeather: api key was not injected!');
   }

@@ -54,27 +54,29 @@ const onUpdateCity = (city: CityEntity): void => {
 </script>
 
 <template>
-  <AppContainer>
-    <SettingsButton @click="clickOnSettingsHandler" />
+  <main id="root">
+    <AppContainer>
+      <SettingsButton @click="clickOnSettingsHandler" />
 
-    <DefaultHomeMessage v-if="!cities.length" />
+      <DefaultHomeMessage v-if="!cities.length" />
 
-    <CityPanel
-      v-for="city in cities"
-      :key="city.id"
-      :city="city"
-      @update-city="onUpdateCity" />
+      <CityPanel
+        v-for="city in cities"
+        :key="city.id"
+        :city="city"
+        @update-city="onUpdateCity" />
 
-    <ModalUi
-      v-if="isSettingsOpened"
-      @close-modal="isSettingsOpened = false">
-      <SettingsModal
-        :cities="cities"
-        @reorderCities="reorderCitiesHandler"
-        @remove-city="onRemoveCity"
-        @add-city="onAddCity" />
-    </ModalUi>
-  </AppContainer>
+      <ModalUi
+        v-if="isSettingsOpened"
+        @close-modal="isSettingsOpened = false">
+        <SettingsModal
+          :cities="cities"
+          @reorderCities="reorderCitiesHandler"
+          @remove-city="onRemoveCity"
+          @add-city="onAddCity" />
+      </ModalUi>
+    </AppContainer>
+  </main>
 </template>
 
 <style>
