@@ -37,7 +37,7 @@ const normalizedWeather = ref<CityWeatherEntity>();
 </script>
 
 <template>
-  <section :class="styles.cityPanel">
+  <section class="city-panel">
     <Loader v-if="weatherResponse.isLoading" />
 
     <WeatherDisplay
@@ -47,23 +47,19 @@ const normalizedWeather = ref<CityWeatherEntity>();
 
     <div
       v-if="weatherResponse.isError"
-      :class="styles.errorMessage">
+      class="error-message u-absolute-center">
       Oops... something went wrong!
     </div>
   </section>
 </template>
 
-<style module="styles" lang="scss">
-@use '@/styles/mixins.scss';
-
-.cityPanel {
+<style scoped>
+.city-panel {
   position: relative;
   min-height: var(--widget-min-height);
 }
 
-.errorMessage {
-  @include mixins.absolute-center;
-
+.error-message {
   width: 100%;
   text-align: center;
 }

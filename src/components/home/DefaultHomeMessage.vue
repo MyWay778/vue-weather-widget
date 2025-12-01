@@ -1,21 +1,20 @@
 <script setup lang="ts">
 import { SettingsIcon } from '@/components/icons/';
 </script>
-<template>
-  <p :class="styles.message">Click on <SettingsIcon :class="styles.messageIcon" /> to add a city!</p>
-</template>
-<style module="styles" lang="scss">
-@use '@/styles/mixins.scss';
 
+<template>
+  <p class="message u-absolute-center">Click on <SettingsIcon class="message-icon" /> to add a city!</p>
+</template>
+
+<style scoped>
 .message {
-  @include mixins.absolute-center;
   text-align: center;
   font-size: 18px;
+}
 
-  &Icon {
-    width: 18px;
-    height: 18px;
-    vertical-align: middle;
-  }
+.message-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
 }
 </style>

@@ -91,14 +91,13 @@ const onEnterDown = () => {
 
 <template>
   <form
-    :class="styles.addCityForm"
+    class="add-city-form"
     @submit.prevent>
-    <TitleUi :class="styles.title">Add Location:</TitleUi>
+    <TitleUi>Add Location:</TitleUi>
 
-    <div :class="styles.cityName">
+    <div class="city-name">
       <InputWithOptions
         v-model="cityInput"
-        :class="styles.input"
         :options="options"
         @option-click="onOptionClick"
         @enter-down="onEnterDown"
@@ -107,7 +106,8 @@ const onEnterDown = () => {
         placeholder="Enter city..." />
 
       <IconButton
-        :class="[styles.arrowBtn, { [styles.disabled]: isSubmitDisabled }]"
+        class="arrow-btn"
+        :class="{ _disabled: isSubmitDisabled }"
         @click="onSubmit">
         <ArrowLeftIcon />
       </IconButton>
@@ -115,17 +115,17 @@ const onEnterDown = () => {
 
     <div
       v-show="message && !options.length"
-      :class="styles.message">
+      class="message">
       {{ message }}
     </div>
   </form>
 </template>
 
-<style module="styles" lang="scss">
-.addCityForm {
+<style scoped>
+.add-city-form {
   margin-top: 40px;
 
-  .cityName {
+  .city-name {
     position: relative;
     display: flex;
     align-items: center;
@@ -134,12 +134,12 @@ const onEnterDown = () => {
   }
 }
 
-.arrowBtn {
+.arrow-btn {
   flex-shrink: 0;
   width: 25px;
   height: 25px;
 
-  &.disabled {
+  &._disabled {
     opacity: 0.5;
 
     &:hover {

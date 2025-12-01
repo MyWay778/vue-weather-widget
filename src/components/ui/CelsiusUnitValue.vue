@@ -1,12 +1,12 @@
 <script setup lang="ts">
-defineProps<{ value: number }>();
+const { value } = defineProps<{ value: number }>();
 </script>
 
 <template>
-  <span>{{ value }}<sup :class="styles.celsius">o</sup>C</span>
+  <span>{{ value }}<sup class="celsius">o</sup>C</span>
 </template>
 
-<style module="styles" lang="scss">
+<style scoped>
 .celsius {
   vertical-align: middle;
   position: relative;

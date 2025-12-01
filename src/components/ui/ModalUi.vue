@@ -2,16 +2,16 @@
 import { CloseIcon } from '@/components/icons/';
 import { IconButton } from '@/components/ui';
 
-defineEmits<{
-  (e: 'closeModal'): void;
+const emit = defineEmits<{
+  (e: 'close-modal'): void;
 }>();
 </script>
 
 <template>
-  <aside :class="styles.modal">
+  <aside class="modal">
     <IconButton
-      :class="styles.close"
-      @click="$emit('closeModal')">
+      class="close"
+      @click="emit('close-modal')">
       <CloseIcon />
     </IconButton>
 
@@ -19,7 +19,7 @@ defineEmits<{
   </aside>
 </template>
 
-<style module="styles" lang="scss">
+<style scoped>
 .modal {
   position: absolute;
   top: 0;

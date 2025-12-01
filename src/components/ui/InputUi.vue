@@ -45,14 +45,14 @@ const inputHandler = (event: Event) => {
   <input
     :value="modelValue"
     @input="inputHandler"
-    :class="styles.input"
+    class="input"
     :type="type"
     :placeholder="placeholder"
     :disabled="disabled"
     ref="inputEl" />
 </template>
 
-<style module="styles" lang="scss">
+<style scoped>
 .input {
   width: 100%;
   height: 35px;

@@ -66,7 +66,7 @@ const onUpdateModelValue = (value: string) => {
 
 <template>
   <div
-    :class="styles.container"
+    class="container"
     @click.stop>
     <InputUi
       :model-value="modelValue"
@@ -81,11 +81,11 @@ const onUpdateModelValue = (value: string) => {
 
     <ul
       v-show="isShowOptions"
-      :class="styles.suggestions">
+      class="suggestions">
       <button
         v-for="option in options"
         :key="option.id"
-        :class="styles.button"
+        class="button c-button"
         @click="onOptionClick(option)"
         type="button">
         {{ option.name }}, {{ option.country }}
@@ -94,12 +94,11 @@ const onUpdateModelValue = (value: string) => {
   </div>
 </template>
 
-<style module="styles" lang="scss">
-@use '@/styles/mixins.scss';
-
+<style scoped>
 .container {
   position: relative;
 }
+
 .suggestions {
   position: absolute;
   left: 0;
@@ -131,7 +130,6 @@ const onUpdateModelValue = (value: string) => {
 }
 
 .button {
-  @include mixins.common-button;
   text-align: left;
 }
 </style>

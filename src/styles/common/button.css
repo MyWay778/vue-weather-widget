@@ -1,0 +1,13 @@
+.c-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  color: var(--black);
+  transition: color 0.2s;
+
+  &:hover {
+    color: var(--active);
+  }
+}

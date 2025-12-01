@@ -3,7 +3,6 @@ import { CelsiusUnitValue, TitleUi, WindArrow } from '@/components/ui/';
 import { CompassIcon, GeoIcon } from '@/components/icons/';
 import type CityWeatherEntity from '@/typings/models/CityWeatherEntity';
 
-// eslint-disable-next-line vue/no-setup-props-destructure
 const { weather, currentPosition } = defineProps<{
   weather: CityWeatherEntity;
   currentPosition?: boolean;
@@ -11,86 +10,83 @@ const { weather, currentPosition } = defineProps<{
 </script>
 
 <template>
-  <div :class="styles.header">
-    <TitleUi :class="styles.title"
+  <div class="header">
+    <TitleUi class="title u-text-overflow"
       >{{ weather.name }}, {{ weather.country }}
       <GeoIcon
         v-if="currentPosition"
-        :class="styles.geoIcon"
+        class="geo-icon"
         width="16"
         height="16"
     /></TitleUi>
   </div>
 
-  <div :class="styles.tempBlock">
-    <div :class="styles.image">
+  <div class="temp-block">
+    <div class="image">
       <img
         :src="weather.iconUrl"
         :atl="weather.main" />
     </div>
-    <div :class="styles.value">
+    <div class="value">
       <CelsiusUnitValue :value="weather.temp" />
     </div>
   </div>
 
-  <div :class="styles.infoBlock">
-    <div :class="styles.description">
+  <div class="info-block">
+    <div class="description">
       Feels like <CelsiusUnitValue :value="weather.feelsLike" />. {{ weather.description }}.
     </div>
 
-    <div :class="styles.entries">
-      <div :class="[styles.entry, styles.entry_withIcon]">
+    <div class="entries">
+      <div class="entry _with-icon">
         <WindArrow :deg="weather.windDeg" />
         <span> {{ weather.windSpeed }}m/s {{ weather.windDir }}</span>
       </div>
 
-      <div :class="[styles.entry, styles.entry_withIcon]">
+      <div class="entry _with-icon">
         <CompassIcon />
         <span> {{ weather.pressure }}hPa</span>
       </div>
 
-      <div :class="styles.entry">
-        <span :class="styles.entryTitle">Humidity: </span>
+      <div class="entry">
+        <span class="entry-title">Humidity: </span>
         <span>{{ weather.humidity }}%</span>
       </div>
 
-      <div :class="styles.entry">
-        <span :class="styles.entryTitle">Visibility: </span>
+      <div class="entry">
+        <span class="entry-title">Visibility: </span>
         <span>{{ weather.visibility }}km</span>
       </div>
 
       <div
         v-if="weather.seaLevel"
-        :class="styles.entry">
-        <span :class="styles.entryTitle">Sea level: </span>
+        class="entry">
+        <span class="entry-title">Sea level: </span>
         <span>{{ weather.seaLevel }}km</span>
       </div>
     </div>
   </div>
 </template>
 
-<style module="styles" lang="scss">
-@use '@/styles/mixins.scss';
-
+<style scoped>
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 
   .title {
-    @include mixins.text-overflow;
     padding-right: 20px;
     position: relative;
     max-width: 80%;
   }
 
-  .geoIcon {
+  .geo-icon {
     position: absolute;
     right: 0;
   }
 }
 
-.tempBlock {
+.temp-block {
   display: flex;
   align-items: center;
   height: 80px;
@@ -118,7 +114,7 @@ const { weather, currentPosition } = defineProps<{
   }
 }
 
-.infoBlock {
+.info-block {
   font-size: 14px;
   margin-top: 15px;
 }
@@ -133,13 +129,13 @@ const { weather, currentPosition } = defineProps<{
 .entry {
   min-width: 50%;
 
-  &_withIcon {
+  &._with-icon {
     display: flex;
     align-items: center;
     column-gap: 5px;
   }
 
-  .entryTitle {
+  .entry-title {
     font-weight: 600;
   }
 }

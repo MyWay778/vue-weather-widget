@@ -1,11 +1,13 @@
 <script setup lang="ts"></script>
+
 <template>
-  <div :class="styles.appContainer">
+  <div class="app-container">
     <slot></slot>
   </div>
 </template>
-<style module="styles" lang="scss">
-.appContainer {
+
+<style scoped>
+.app-container {
   position: relative;
   display: flex;
   flex-direction: column;

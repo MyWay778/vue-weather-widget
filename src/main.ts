@@ -2,8 +2,6 @@ import { createApp } from 'vue';
 import App from '@/App.vue';
 import { sanitizeInput, excludedChars, setStyles } from '@/helpers';
 
-import './styles/main.scss';
-
 const ROOT_NAME = 'weather-widget';
 const rootStyles: Partial<CSSStyleDeclaration> = { display: 'inline-block' };
 

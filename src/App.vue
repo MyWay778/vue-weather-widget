@@ -67,7 +67,7 @@ const onUpdateCity = (city: CityEntity): void => {
 
     <ModalUi
       v-if="isSettingsOpened"
-      @closeModal="isSettingsOpened = false">
+      @close-modal="isSettingsOpened = false">
       <SettingsModal
         :cities="cities"
         @reorderCities="reorderCitiesHandler"
@@ -76,3 +76,7 @@ const onUpdateCity = (city: CityEntity): void => {
     </ModalUi>
   </AppContainer>
 </template>
+
+<style>
+@import './styles/index.css';
+</style>

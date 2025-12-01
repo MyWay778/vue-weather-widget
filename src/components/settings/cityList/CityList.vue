@@ -55,26 +55,27 @@ const onRemoveCity = (cityId: string): void => {
 
 <template>
   <ul
-    :class="styles.cityList"
+    class="city-list"
     ref="list">
     <li
       v-for="(city, index) in localCities"
       :key="city.id"
-      :class="styles.itemContainer">
+      class="item-container">
       <div
-        :class="[styles.cityItem, { [styles.draggable]: activeIndex === index }]"
+        class="city-item"
+        :class="{ draggable: activeIndex === index }"
         @mouseup="onDragEnd()"
         ref="items">
         <div
-          :class="styles.hamburger"
+          class="hamburger"
           @mousedown="onDragStart($event, index)">
           <HamburgerIcon />
         </div>
 
-        <span :class="styles.cityName">{{ city.name }}, {{ city.country }}</span>
+        <span class="city-name u-text-overflow">{{ city.name }}, {{ city.country }}</span>
 
         <IconButton
-          :class="styles.cityItemTrash"
+          class="city-item-trash-icon"
           @click="onRemoveCity(city.id)">
           <TrashIcon />
         </IconButton>
@@ -83,10 +84,8 @@ const onRemoveCity = (cityId: string): void => {
   </ul>
 </template>
 
-<style module="styles" lang="scss">
-@use '@/styles/mixins.scss';
-
-.cityList {
+<style scoped>
+.city-list {
   position: relative;
   margin-top: 20px;
   display: flex;
@@ -94,11 +93,11 @@ const onRemoveCity = (cityId: string): void => {
   row-gap: 10px;
 }
 
-.itemContainer {
+.item-container {
   border: 1px solid var(--gray-light);
 }
 
-.cityItem {
+.city-item {
   position: relative;
   display: flex;
   width: 100%;
@@ -106,11 +105,6 @@ const onRemoveCity = (cityId: string): void => {
   padding: 6px 5px;
   column-gap: 5px;
   background-color: var(--gray-light);
-
-  &Trash {
-    margin-left: auto;
-    flex-shrink: 0;
-  }
 
   &.draggable {
     z-index: 1;
@@ -123,6 +117,11 @@ const onRemoveCity = (cityId: string): void => {
   }
 }
 
+.city-item-trash-icon {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
 .hamburger {
   display: flex;
   justify-content: center;
@@ -130,8 +129,7 @@ const onRemoveCity = (cityId: string): void => {
   cursor: grab;
 }
 
-.cityName {
-  @include mixins.text-overflow;
+.city-name {
   user-select: none;
 }
 </style>

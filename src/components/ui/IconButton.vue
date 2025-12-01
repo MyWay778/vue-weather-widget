@@ -2,17 +2,14 @@
 
 <template>
   <button
-    :class="styles.button"
+    class="button c-button"
     type="button">
     <slot></slot>
   </button>
 </template>
 
-<style module="styles" lang="scss">
-@use '@/styles/mixins.scss';
-
+<style scoped>
 .button {
-  @include mixins.common-button;
   width: 20px;
   height: 20px;
 }

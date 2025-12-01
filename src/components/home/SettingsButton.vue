@@ -2,13 +2,15 @@
 import { SettingsIcon } from '@/components/icons/';
 import { IconButton } from '@/components/ui';
 </script>
+
 <template>
-  <IconButton :class="styles.settingsBtn">
+  <IconButton class="settings-btn">
     <SettingsIcon />
   </IconButton>
 </template>
-<style module="styles" lang="scss">
-.settingsBtn {
+
+<style scoped>
+.settings-btn {
   position: absolute;
   top: 20px;
   right: 20px;

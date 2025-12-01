@@ -1,8 +1,8 @@
 <template>
-  <h2 :class="styles.title"><slot /></h2>
+  <h2 class="title"><slot /></h2>
 </template>
 
-<style module="styles" lang="scss">
+<style scoped>
 .title {
   font-size: 15px;
   font-weight: 600;

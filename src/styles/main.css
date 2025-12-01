@@ -1,0 +1,48 @@
+*,
+*:after,
+*:before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  /* Colors */
+  --black: #3b3b3b;
+  --gray: #c2c2c2;
+  --gray-light: #d1d1d1;
+  --shadow: #c3c2c24f;
+  --white: #fff;
+  --active: #5faffa;
+
+  /* Fonts */
+  --font-size: 16px;
+  --font-family: 'Open Sans', sans-serif;
+
+  /* Sizes */
+  --widget-width: 260px;
+  --widget-min-height: 236px;
+
+  /* Others */
+  --border-radius: 10px;
+}
+
+html {
+  font-size: var(--font-size);
+  font-family: var(--font-family);
+  color: var(--black);
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
