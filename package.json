@@ -12,7 +12,12 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
-    "lint": "eslint ./src --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
+    "lint": "eslint ./src --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-pattern .gitignore",
+    "format": "prettier . --check",
+    "release": "npm version -m \"release: %s\"",
+    "preversion": "echo \"I hope you are on MAIN branch!\n\" && npm run type-check && npm run lint && npm run format",
+    "version": "npm run build && git add -A dist",
+    "postversion": "echo \"Don't forget use git push --tags\"!"
   },
   "dependencies": {
     "vite-plugin-css-injected-by-js": "^3.5.2",
@@ -28,6 +33,7 @@
     "@vue/tsconfig": "^0.8.1",
     "eslint": "^9.39.1",
     "eslint-plugin-vue": "^10.6.2",
+    "jiti": "^2.6.1",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.7.3",
     "typescript": "^5.9.3",

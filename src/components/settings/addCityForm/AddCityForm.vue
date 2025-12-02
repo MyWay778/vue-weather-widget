@@ -14,10 +14,10 @@ const inputWithOptionsRef = ref<InputWithOptionsRef>(); // a reference to the in
 const cityInput = ref('');
 const cityRequest = ref('');
 const { options, isError } = useFetchCityOptions(cityRequest, 600);
-let selectedOption = ref<CityEntity>();
+const selectedOption = ref<CityEntity>();
 let isOptionSelected = false; // flag to know if the user has selected an option
-let message = ref('');
-let isSubmitDisabled = computed(() => !selectedOption.value);
+const message = ref('');
+const isSubmitDisabled = computed(() => !selectedOption.value);
 
 watch(isError, () => {
   if (isError.value) {

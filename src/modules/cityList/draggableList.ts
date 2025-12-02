@@ -25,12 +25,13 @@ export default function draggableList(
     initialX = event.x;
     initialY = event.y;
 
-    activeEl = items[index];
+    activeEl = items[index] ?? null;
     activeIndex = index;
+
+    if (!activeEl) return;
 
     // make active element visually active
     setElementTransform(activeEl, { scale });
-
     window.addEventListener('mousemove', onDrag);
   };
 
@@ -61,7 +62,6 @@ export default function draggableList(
 
       function activeBelowTarget(): boolean {
         return (
-          // eslint-disable-next-line prettier/prettier
           activeIndex < targetIndex && // active el was before target in items array
           targetRect.top < activeRect.top &&
           targetRect.bottom < activeRect.bottom
@@ -70,7 +70,6 @@ export default function draggableList(
 
       function activeAboveTarget(): boolean {
         return (
-          // eslint-disable-next-line prettier/prettier
           activeIndex > targetIndex && // active el was after target in items array
           targetRect.top > activeRect.top &&
           targetRect.bottom > activeRect.bottom
@@ -124,8 +123,7 @@ export default function draggableList(
       if (!listRect) return false;
 
       return (
-        // eslint-disable-next-line prettier/prettier
-        listRect.left > activeRect.right || 
+        listRect.left > activeRect.right ||
         listRect.top > activeRect.bottom ||
         listRect.right < activeRect.left ||
         listRect.bottom < activeRect.top
