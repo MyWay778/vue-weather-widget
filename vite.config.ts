@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         input: './src/main.ts',
         output: {
-          entryFileNames: `weather-widget-v${packageVersion}.js`
+          entryFileNames: `weather-widget.min.js`
         }
       }
     }
