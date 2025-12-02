@@ -6,16 +6,30 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0" />
     <title>Weather widget</title>
+    <link
+      rel="stylesheet"
+      href="styles.css" />
   </head>
   <body>
-    <div style="padding: 50px">
-      <script
-        type="module"
-        src="/src/main.ts"></script>
-      <weather-widget></weather-widget>
+    <header class="header">
+      <div class="container">Header</div>
+    </header>
 
-      <!-- for testing bundle -->
-      <!-- <script src="./dist/weather-widget-1bc92d8f.js"></script> -->
-    </div>
+    <main class="main">
+      <div class="container">
+        <aside class="aside">
+          <script
+            type="module"
+            src="https://cdn.jsdelivr.net/gh/MyWay778/vue-weather-widget/dist/weather-widget.min.js"></script>
+          <weather-widget></weather-widget>
+        </aside>
+
+        <div class="content">Content</div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">Footer</div>
+    </footer>
   </body>
 </html>
