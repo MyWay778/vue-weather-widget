@@ -14,13 +14,14 @@ export default defineConfigWithVueTs(
     files: ['**/*.{ts,mts,tsx,vue}'],
     rules: {
       quotes: ['error', 'single'],
-      'no-console': ['error', { allow: ['warn'] }]
+      'no-console': ['error', { allow: ['warn'] }],
+      '@typescript-eslint/no-unused-vars': 'warn'
     }
   },
 
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
 
   pluginVue.configs['flat/essential'],
-  vueTsConfigs.recommended,
+  vueTsConfigs.base,
   skipFormatting
 );
