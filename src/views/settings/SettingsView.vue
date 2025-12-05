@@ -31,6 +31,7 @@
 
     <AddCityForm
       v-if="isShowAddForm"
+      :cities="citiesModel"
       @add-city="addCityHandler" />
 
     <div

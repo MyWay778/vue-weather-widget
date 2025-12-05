@@ -1,8 +1,12 @@
 <script setup lang="ts">
   import { computed, ref, shallowRef, useTemplateRef, watch } from 'vue'
-  import { TitleUi, InputWithOptions, IconButton, ArrowLeftIcon } from '@/components/shared'
+  import { TitleUi, InputWithOptions, IconButton, ArrowLeftIcon, type InputOption } from '@/components/shared'
   import { useFetchCityOptions } from '@/composables/'
   import type { City } from '@/entities/city'
+
+  const props = defineProps<{
+    cities: City[]
+  }>()
 
   const emit = defineEmits<{
     'add-city': [city: City]
@@ -16,6 +20,12 @@
   const inputWithOptionsRef = useTemplateRef<InstanceType<typeof InputWithOptions>>('input-with-options') // a reference to the inputWithOptions component
 
   const { options, isError, isLoading } = useFetchCityOptions(inputValue, enableRequest, 600)
+  const inputOptions = computed<InputOption[]>(() => {
+    const citiesIds = props.cities.map(city => city.id)
+    return options.value
+      .map(option => ({ value: option.id, label: `${option.name} ${option.country}` }))
+      .filter(option => !citiesIds.includes(option.value)) // filter out already added cities
+  })
 
   // Error handling
   watch(isError, value => {
@@ -91,13 +101,18 @@
     }
   }
 
-  const selectOptionHandler = (option: City): void => {
-    selectedOption.value = option
+  const selectOptionHandler = (option: InputOption): void => {
+    const selectedCity = options.value.find(city => city.id === option.value)
+    if (!selectedCity) {
+      throw new Error('selectOptionHandler: selected city not found')
+    }
 
-    // prevent request with selected option value
+    selectedOption.value = selectedCity
+
+    // prevent unnecessary request with selected city
     enableRequest.value = false
-    // set the selected option in the input field
-    inputValue.value = `${option.name}, ${option.country}`
+    // set the selected option label in the input field
+    inputValue.value = option.label
 
     inputWithOptionsRef.value?.blurInput()
   }
@@ -120,7 +135,7 @@
         v-model="inputValue"
         name="city-name"
         @update:model-value="updateInputValueHandler"
-        :options="options"
+        :options="inputOptions"
         @select-option="selectOptionHandler"
         @enter-down="onEnterDown"
         ref="input-with-options"
