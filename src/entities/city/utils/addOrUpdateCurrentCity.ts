@@ -1,39 +1,39 @@
-import type { Ref } from 'vue';
-import type CityEntity from '@/typings/models/CityEntity';
-import { getCurrentPosition, makeCityId } from '@/helpers';
+import type { Ref } from 'vue'
+import type CityEntity from '@/typings/models/CityEntity'
+import { getCurrentPosition, makeCityId } from '@/helpers'
 
-export default function addOrUpdateCurrentCity(cities: Ref<CityEntity[]>, currentCityIndex: number): void {
+export function addOrUpdateCurrentCity(cities: Ref<CityEntity[]>, currentCityIndex: number): void {
   // if there is no city get the current position
   if (!cities.value.length) {
     getCurrentPosition(pos => {
-      const { coords } = pos;
-      cities.value.push(createCurrentCityEntity(coords));
-    });
+      const { coords } = pos
+      cities.value.push(createCurrentCityEntity(coords))
+    })
   } else if (currentCityIndex > -1) {
     // if there is a current position in the storage, update the user's position
     getCurrentPosition(
       pos => {
-        const { coords } = pos;
-        const updatedCurrentCity = createCurrentCityEntity(coords);
+        const { coords } = pos
+        const updatedCurrentCity = createCurrentCityEntity(coords)
 
-        const citiesCopy = [...cities.value];
+        const citiesCopy = [...cities.value]
         // replace old current position
-        citiesCopy.splice(currentCityIndex, 1, updatedCurrentCity);
+        citiesCopy.splice(currentCityIndex, 1, updatedCurrentCity)
 
-        cities.value = citiesCopy;
+        cities.value = citiesCopy
       },
       () => {
         // if it was not possible to get the current position, disable the current position option,
         // because the saved position may be incorrect
         cities.value = cities.value.map(c => {
           if (c.currentPos) {
-            c.currentPos = false;
+            c.currentPos = false
           }
 
-          return c;
-        });
+          return c
+        })
       }
-    );
+    )
   }
 }
 
@@ -45,5 +45,5 @@ function createCurrentCityEntity(coords: GeolocationCoordinates): CityEntity {
     lat: coords.latitude,
     lon: coords.longitude,
     currentPos: true
-  };
+  }
 }

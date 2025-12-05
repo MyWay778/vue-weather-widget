@@ -9,8 +9,8 @@
 </template>
 
 <style scoped>
-.button {
-  width: 20px;
-  height: 20px;
-}
+  .button {
+    width: 20px;
+    height: 20px;
+  }
 </style>

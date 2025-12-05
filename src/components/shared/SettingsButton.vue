@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { SettingsIcon } from '@/components/icons/';
-import { IconButton } from '@/components/ui';
+import { SettingsIcon } from '@/components/icons/'
+import { IconButton } from '@/components/ui'
 </script>
 
 <template>

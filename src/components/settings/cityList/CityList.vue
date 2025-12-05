@@ -1,56 +1,56 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { swapArrayItems } from '@/helpers/';
-import { HamburgerIcon, TrashIcon } from '@/components/icons/';
-import { IconButton } from '@/components/ui/';
-import type CityEntity from '@/typings/models/CityEntity';
-import { draggableList } from '@/modules/cityList/';
+import { onMounted, ref, watch } from 'vue'
+import { swapArrayItems } from '@/helpers/'
+import { HamburgerIcon, TrashIcon } from '@/components/icons/'
+import { IconButton } from '@/components/ui/'
+import type CityEntity from '@/typings/models/CityEntity'
+import { draggableList } from '@/modules/cityList/'
 
-const props = defineProps<{ cities: CityEntity[] }>();
+const props = defineProps<{ cities: CityEntity[] }>()
 const emit = defineEmits<{
-  (event: 'reorderCities', updatedCities: CityEntity[]): void;
-  (event: 'removeCity', cityId: string): void;
-}>();
+  (event: 'reorderCities', updatedCities: CityEntity[]): void
+  (event: 'removeCity', cityId: string): void
+}>()
 
-const localCities = ref<CityEntity[]>(props.cities);
+const localCities = ref<CityEntity[]>(props.cities)
 watch(props, () => {
-  localCities.value = props.cities;
-});
+  localCities.value = props.cities
+})
 
-const list = ref<HTMLElement>();
-const items = ref<HTMLElement[]>([]);
-const activeIndex = ref(-1);
-let draggable: ReturnType<typeof draggableList> | null = null;
+const list = ref<HTMLElement>()
+const items = ref<HTMLElement[]>([])
+const activeIndex = ref(-1)
+let draggable: ReturnType<typeof draggableList> | null = null
 
 onMounted(() => {
   if (list.value && items.value) {
-    draggable = draggableList(list.value, items.value, onItemPositionChanged);
+    draggable = draggableList(list.value, items.value, onItemPositionChanged)
   }
-});
+})
 
 const onItemPositionChanged = (oldIndex: number, newIndex: number): void => {
-  localCities.value = swapArrayItems(localCities.value, oldIndex, newIndex);
-  activeIndex.value = newIndex;
-  emit('reorderCities', localCities.value);
-};
+  localCities.value = swapArrayItems(localCities.value, oldIndex, newIndex)
+  activeIndex.value = newIndex
+  emit('reorderCities', localCities.value)
+}
 
 const onDragStart = (event: MouseEvent, index: number) => {
   if (draggable) {
-    activeIndex.value = index;
-    draggable.onDragStart(event, index);
+    activeIndex.value = index
+    draggable.onDragStart(event, index)
   }
-};
+}
 
 const onDragEnd = () => {
   if (draggable) {
-    activeIndex.value = -1;
-    draggable.onDragEnd();
+    activeIndex.value = -1
+    draggable.onDragEnd()
   }
-};
+}
 
 const onRemoveCity = (cityId: string): void => {
-  emit('removeCity', cityId);
-};
+  emit('removeCity', cityId)
+}
 </script>
 
 <template>

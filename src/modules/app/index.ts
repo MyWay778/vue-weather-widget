@@ -1,1 +1,1 @@
-export { default as addOrUpdateCurrentCity } from './addOrUpdateCurrentCity';
+export * from '../../entities/city/utils/addOrUpdateCurrentCity'

@@ -1,84 +1,46 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
-import { CityPanel } from '@/components/weather/';
-import { SettingsModal } from '@/components/settings/';
-import { getStorage } from '@/helpers/';
-import { addOrUpdateCurrentCity } from '@/modules/app';
-import { DefaultHomeMessage, SettingsButton, AppContainer } from '@/components/home/';
-import { ModalUi } from '@/components/ui';
-import type CityEntity from '@/typings/models/CityEntity';
+  import { ref, shallowRef, watch } from 'vue'
+  import { getStorage } from '@/helpers/'
+  import { AppContainer } from '@/components/home/'
+  import { CitiesListView } from '@/views/cities-list-view'
+  import { SettingsView } from './views/settings'
+  import type { City } from './entities/city/models/City'
+  import { useGeoPositionCity } from '@/entities/city'
 
-const STORAGE_KEY = 'weatherWidget';
-const cityStorage = getStorage<CityEntity[]>(STORAGE_KEY);
-const cityFromStorage = cityStorage.get({ isStringify: true }) ?? [];
+  // Get cities from storage
+  const STORAGE_KEY = 'weather-widget-cities'
+  const cityStorage = getStorage<City[]>(STORAGE_KEY)
+  const cityFromStorage = cityStorage.get({ isStringify: true }) ?? []
 
-const cities = ref(cityFromStorage);
-watch(cities, newCities => {
-  cityStorage.save(newCities);
-});
+  const cities = shallowRef<City[]>(cityFromStorage)
 
-const currentCityIndex = cities.value.findIndex(c => c.currentPos);
+  // Update cities in localstorage
+  watch(cities, newCities => {
+    cityStorage.save(newCities)
+  })
 
-// get new or update user current position
-addOrUpdateCurrentCity(cities, currentCityIndex);
+  // Geo Position
+  useGeoPositionCity(cities)
 
-const isSettingsOpened = ref(false);
-const clickOnSettingsHandler = () => {
-  isSettingsOpened.value = true;
-};
-
-const reorderCitiesHandler = (updatedCities: CityEntity[]) => {
-  cities.value = updatedCities;
-};
-
-const onRemoveCity = (cityId: string) => {
-  cities.value = cities.value.filter(city => city.id !== cityId);
-};
-
-const onAddCity = (city: CityEntity): void => {
-  const foundCity = cities.value.find(c => c.id === city.id);
-  if (foundCity) {
-    return;
-  }
-
-  cities.value = cities.value.concat(city);
-};
-
-const onUpdateCity = (city: CityEntity): void => {
-  const foundCityIndex = cities.value.findIndex(c => c.id === city.id);
-
-  if (foundCityIndex > -1) {
-    cities.value[foundCityIndex] = city;
-  }
-};
+  // Settings View
+  const showSettings = ref(false)
 </script>
 
 <template>
   <main id="root">
     <AppContainer>
-      <SettingsButton @click="clickOnSettingsHandler" />
+      <CitiesListView
+        :cities="cities"
+        @go-to-settings="showSettings = true" />
 
-      <DefaultHomeMessage v-if="!cities.length" />
-
-      <CityPanel
-        v-for="city in cities"
-        :key="city.id"
-        :city="city"
-        @update-city="onUpdateCity" />
-
-      <ModalUi
-        v-if="isSettingsOpened"
-        @close-modal="isSettingsOpened = false">
-        <SettingsModal
-          :cities="cities"
-          @reorderCities="reorderCitiesHandler"
-          @remove-city="onRemoveCity"
-          @add-city="onAddCity" />
-      </ModalUi>
+      <SettingsView
+        v-if="showSettings"
+        v-model:cities="cities"
+        @close-settings="showSettings = false" />
     </AppContainer>
   </main>
 </template>
 
 <style>
-@import './styles/index.css';
+  @import './styles/index.css';
 </style>

@@ -1,0 +1,5 @@
+export { default as ArrowLeftIcon } from './ArrowLeftIcon.vue'
+export { default as ArrowIcon } from './ArrowIcon.vue'
+export { default as LeftArrowIcon } from './LeftArrowIcon.vue'
+export { default as HamburgerIcon } from './HamburgerIcon.vue'
+export { default as TrashIcon } from './TrashIcon.vue'
