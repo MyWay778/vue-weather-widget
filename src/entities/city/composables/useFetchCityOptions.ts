@@ -1,7 +1,7 @@
 import { inject, ref, shallowRef, toValue, watch, type MaybeRefOrGetter, type Ref } from 'vue'
 import { CityService, type City } from '@/entities/city'
 
-export default function useFetchCityOptions(
+export function useFetchCityOptions(
   cityRequest: Ref<string>, // city search string
   enable?: MaybeRefOrGetter<boolean>, // enable/disable request, despite cityRequest value changing
   delay = 1000 // delay between requests for debouncing

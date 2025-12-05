@@ -1,1 +1,1 @@
-export { default as CitiesListView } from './CitiesListView.vue';
+export { default as CitiesListView } from './CitiesListView.vue'

@@ -1,1 +1,1 @@
-export { default as CityDragAndDropList } from './CityDragAndDropList.vue';
+export { default as CityDragAndDropList } from './CityDragAndDropList.vue'

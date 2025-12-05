@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, shallowRef, watch } from 'vue'
   import { getStorage } from '@/helpers/'
-  import { AppContainer } from '@/components/home/'
+  import { AppContainer } from '@/components/layout'
   import { CitiesListView } from '@/views/cities-list-view'
   import { SettingsView } from './views/settings'
   import type { City } from './entities/city/models/City'

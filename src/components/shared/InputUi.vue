@@ -1,39 +1,39 @@
 <script setup lang="ts">
-import { useTemplateRef } from 'vue'
+  import { useTemplateRef } from 'vue'
 
-const model = defineModel<string>({ required: true })
+  const model = defineModel<string>({ required: true })
 
-const props = withDefaults(
-  defineProps<{
-    name: string
-    type: string
-    placeholder: string
-    disabled?: boolean
-  }>(),
-  {
-    type: 'text',
-    placeholder: '',
-    disabled: false
+  const props = withDefaults(
+    defineProps<{
+      name: string
+      type: string
+      placeholder: string
+      disabled?: boolean
+    }>(),
+    {
+      type: 'text',
+      placeholder: '',
+      disabled: false
+    }
+  )
+
+  const inputEl = useTemplateRef<HTMLInputElement>('input')
+
+  // Expose
+  function focusInput() {
+    if (!inputEl.value) return
+    inputEl.value.focus()
   }
-)
 
-const inputEl = useTemplateRef<HTMLInputElement>('input')
+  function blurInput() {
+    if (!inputEl.value) return
+    inputEl.value.blur()
+  }
 
-// Expose
-function focusInput() {
-  if (!inputEl.value) return
-  inputEl.value.focus()
-}
-
-function blurInput() {
-  if (!inputEl.value) return
-  inputEl.value.blur()
-}
-
-defineExpose({
-  focusInput,
-  blurInput
-})
+  defineExpose({
+    focusInput,
+    blurInput
+  })
 </script>
 
 <template>
@@ -48,12 +48,12 @@ defineExpose({
 </template>
 
 <style scoped>
-.input {
-  width: 100%;
-  height: 35px;
-  padding-left: 8px;
-  font-size: 16px;
-  color: var(--black);
-  outline-color: var(--active);
-}
+  .input {
+    width: 100%;
+    height: 35px;
+    padding-left: 8px;
+    font-size: 16px;
+    color: var(--black);
+    outline-color: var(--active);
+  }
 </style>

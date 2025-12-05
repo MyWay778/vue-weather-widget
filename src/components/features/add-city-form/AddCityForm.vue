@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, ref, shallowRef, useTemplateRef, watch } from 'vue'
   import { TitleUi, InputWithOptions, IconButton, ArrowLeftIcon, type InputOption } from '@/components/shared'
-  import { useFetchCityOptions } from '@/composables/'
+  import { useFetchCityOptions } from '@/entities/city'
   import type { City } from '@/entities/city'
 
   const props = defineProps<{
