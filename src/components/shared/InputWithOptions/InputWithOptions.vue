@@ -1,20 +1,19 @@
 <script setup lang="ts">
   import { computed, ref, useTemplateRef } from 'vue'
-  import { InputUi } from '@/components/shared'
+  import { InputUi, type InputOption } from '@/components/shared'
   import { sanitizeInput, excludedChars } from '@/helpers'
-  import type { City } from '@/entities/city'
 
   const model = defineModel<string>({ required: true })
 
   const props = defineProps<{
     inputType: string
     placeholder: string
-    options: City[]
+    options: InputOption[]
     name: string
   }>()
 
   const emit = defineEmits<{
-    'select-option': [value: City]
+    'select-option': [value: InputOption]
     'enter-down': []
   }>()
 
@@ -28,7 +27,7 @@
     model.value = saveText
   }
 
-  const onOptionClick = (option: City) => {
+  const onOptionClick = (option: InputOption) => {
     emit('select-option', option)
   }
 
@@ -85,11 +84,11 @@
       class="suggestions">
       <button
         v-for="option in options"
-        :key="option.id"
+        :key="option.value"
         class="button c-button"
         @click="onOptionClick(option)"
         type="button">
-        {{ option.name }}, {{ option.country }}
+        {{ option.label }}
       </button>
     </ul>
   </div>
