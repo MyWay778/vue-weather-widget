@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { SettingsIcon } from '@/components/icons/'
+  import { SettingsIcon } from '@/components/shared'
 </script>
 
 <template>
