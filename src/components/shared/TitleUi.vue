@@ -3,8 +3,8 @@
 </template>
 
 <style scoped>
-.title {
-  font-size: 15px;
-  font-weight: 600;
-}
+  .title {
+    font-size: 15px;
+    font-weight: 600;
+  }
 </style>

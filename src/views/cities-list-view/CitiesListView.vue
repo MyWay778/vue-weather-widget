@@ -1,24 +1,21 @@
 <script setup lang="ts">
   import { SettingsButton } from '@/components/shared'
   import EmptyListMessage from './components/EmptyListMessage.vue'
-  import type { City } from '@/entities/city/types'
-  import { CityWeatherList } from '@/components/feature'
+  import type { City } from '@/entities/city'
+  import { CityWeatherList } from '@/components/features'
 
   const props = defineProps<{
     cities: City[]
   }>()
-  const emit = defineEmits<{
-    'go-to-settings': []
-  }>()
 
-  function clickOnSettingsHandler() {
-    emit('go-to-settings')
-  }
+  const emit = defineEmits<{
+    'open-settings': []
+  }>()
 </script>
 
 <template>
   <div>
-    <SettingsButton @click="clickOnSettingsHandler" />
+    <SettingsButton @click="emit('open-settings')" />
 
     <EmptyListMessage v-if="props.cities.length === 0" />
 

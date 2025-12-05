@@ -1,2 +1,2 @@
-export { default as useFetchCityOptions } from './useFetchCityOptions';
-export { default as useFetchWeather } from './useFetchWeather';
+export { default as useFetchCityOptions } from './useFetchCityOptions'
+export * from '../entities/weather/composables/useFetchWeather'

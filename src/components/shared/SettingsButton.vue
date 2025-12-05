@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { SettingsIcon } from '@/components/icons/'
-import { IconButton } from '@/components/ui'
+  import { SettingsIcon } from '@/components/icons/'
+  import { IconButton } from '@/components/ui'
 </script>
 
 <template>
@@ -10,20 +10,20 @@ import { IconButton } from '@/components/ui'
 </template>
 
 <style scoped>
-.settings-btn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1;
+  .settings-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1;
 
-  &:hover {
+    &:hover {
+      svg {
+        transform: rotate(45deg);
+      }
+    }
+
     svg {
-      transform: rotate(45deg);
+      transition: 0.5s;
     }
   }
-
-  svg {
-    transition: 0.5s;
-  }
-}
 </style>

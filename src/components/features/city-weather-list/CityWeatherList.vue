@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { City } from '@/entities/city/types'
+  import type { City } from '@/entities/city'
   import CityWeatherBlock from './components/city-weather-block/CityWeatherBlock.vue'
 
   const props = defineProps<{

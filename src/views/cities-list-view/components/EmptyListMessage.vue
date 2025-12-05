@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { SettingsIcon } from '@/components/icons/';
+  import { SettingsIcon } from '@/components/icons/'
 </script>
 
 <template>
@@ -7,14 +7,14 @@ import { SettingsIcon } from '@/components/icons/';
 </template>
 
 <style scoped>
-.message {
-  text-align: center;
-  font-size: 18px;
-}
+  .message {
+    text-align: center;
+    font-size: 18px;
+  }
 
-.message-icon {
-  width: 18px;
-  height: 18px;
-  vertical-align: middle;
-}
+  .message-icon {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+  }
 </style>

@@ -1,42 +1,42 @@
-export default function getWindDirection(deg: number): string {
+export function getWindDirection(deg: number): string {
   // http://snowfence.umn.edu/Components/winddirectionanddegrees.htm
 
   switch (true) {
     case deg < 11.25:
-      return 'N';
+      return 'N'
     case deg < 33.75:
-      return 'NNE';
+      return 'NNE'
     case deg < 56.25:
-      return 'NE';
+      return 'NE'
     case deg < 78.75:
-      return 'ENE';
+      return 'ENE'
     case deg < 101.25:
-      return 'E';
+      return 'E'
     case deg < 123.75:
-      return 'ESE';
+      return 'ESE'
     case deg < 146.25:
-      return 'SE';
+      return 'SE'
     case deg < 168.75:
-      return 'SSE';
+      return 'SSE'
     case deg < 191.25:
-      return 'S';
+      return 'S'
     case deg < 213.72:
-      return 'SSW';
+      return 'SSW'
     case deg < 236.25:
-      return 'SW';
+      return 'SW'
     case deg < 258.75:
-      return 'WSW';
+      return 'WSW'
     case deg < 281.25:
-      return 'W';
+      return 'W'
     case deg < 303.72:
-      return 'WNW';
+      return 'WNW'
     case deg < 326.25:
-      return 'NW';
+      return 'NW'
     case deg < 348.75:
-      return 'NNW';
+      return 'NNW'
     case deg <= 360:
-      return 'N';
+      return 'N'
   }
 
-  return '';
+  return ''
 }

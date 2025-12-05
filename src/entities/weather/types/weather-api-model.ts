@@ -1,4 +1,4 @@
-export interface WeatherResponse {
+export default interface WeatherApiModel {
   coord: {
     lon: number
     lat: number

@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { CelsiusUnitValue, TitleUi, WindArrow } from '@/components/ui/';
-import { CompassIcon, GeoIcon } from '@/components/icons/';
-import type CityWeatherEntity from '@/typings/models/CityWeatherEntity';
+  import { CelsiusUnitValue, TitleUi, WindArrow, CompassIcon, GeoIcon } from '@/components/shared'
+  import type { Weather } from '@/entities/weather'
 
-const { weather, currentPosition } = defineProps<{
-  weather: CityWeatherEntity;
-  currentPosition?: boolean;
-}>();
+  const { weather, currentPosition } = defineProps<{
+    weather: Weather
+    currentPosition?: boolean
+  }>()
 </script>
 
 <template>
@@ -69,74 +68,74 @@ const { weather, currentPosition } = defineProps<{
 </template>
 
 <style scoped>
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-  .title {
-    padding-right: 20px;
-    position: relative;
-    max-width: 80%;
-  }
+    .title {
+      padding-right: 20px;
+      position: relative;
+      max-width: 80%;
+    }
 
-  .geo-icon {
-    position: absolute;
-    right: 0;
-  }
-}
-
-.temp-block {
-  display: flex;
-  align-items: center;
-  height: 80px;
-  margin-top: 15px;
-
-  .image {
-    width: 50%;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+    .geo-icon {
+      position: absolute;
+      right: 0;
     }
   }
 
-  .value {
-    width: 50%;
-    font-size: 34px;
-    text-align: center;
-
-    .units {
-      vertical-align: top;
-      font-size: 18px;
-    }
-  }
-}
-
-.info-block {
-  font-size: 14px;
-  margin-top: 15px;
-}
-
-.entries {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px 10px;
-  margin-top: 15px;
-}
-
-.entry {
-  min-width: 50%;
-
-  &._with-icon {
+  .temp-block {
     display: flex;
     align-items: center;
-    column-gap: 5px;
+    height: 80px;
+    margin-top: 15px;
+
+    .image {
+      width: 50%;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    .value {
+      width: 50%;
+      font-size: 34px;
+      text-align: center;
+
+      .units {
+        vertical-align: top;
+        font-size: 18px;
+      }
+    }
   }
 
-  .entry-title {
-    font-weight: 600;
+  .info-block {
+    font-size: 14px;
+    margin-top: 15px;
   }
-}
+
+  .entries {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 10px;
+    margin-top: 15px;
+  }
+
+  .entry {
+    min-width: 50%;
+
+    &._with-icon {
+      display: flex;
+      align-items: center;
+      column-gap: 5px;
+    }
+
+    .entry-title {
+      font-weight: 600;
+    }
+  }
 </style>

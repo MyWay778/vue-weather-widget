@@ -31,7 +31,7 @@
     <AppContainer>
       <CitiesListView
         :cities="cities"
-        @go-to-settings="showSettings = true" />
+        @open-settings="showSettings = true" />
 
       <SettingsView
         v-if="showSettings"

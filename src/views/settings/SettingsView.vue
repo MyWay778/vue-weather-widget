@@ -1,8 +1,7 @@
 <script setup lang="ts">
   import { TitleUi } from '@/components/shared'
-  import { CityDragAndDropList } from '@/components/feature/city-drag-and-drop-list'
-  import { AddCityForm } from '@/components/feature/add-city-form'
-  import type { City } from '@/entities/city/types'
+  import { AddCityForm, CityDragAndDropList } from '@/components/features'
+  import type { City } from '@/entities/city'
   import { IconButton, LeftArrowIcon } from '@/components/shared'
   import { computed } from 'vue'
 

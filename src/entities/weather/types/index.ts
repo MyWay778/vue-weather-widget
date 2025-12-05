@@ -1,2 +1,2 @@
-export * from './weather'
-export * from './weather-response'
+export * from './weather-model'
+export * from './weather-api-model'
