@@ -53,4 +53,40 @@ export class CityService {
         throw new Error('Error occurred!')
       })
   }
+
+  async find(query: string) {
+    const endpoint = 'direct'
+
+    const url = createUrl(
+      [endpoint, this.baseUrl],
+      [
+        {
+          key: 'limit',
+          value: this.limit
+        },
+        {
+          key: 'appid',
+          value: this.apiKey
+        },
+        {
+          key: 'q',
+          value: query
+        }
+      ]
+    )
+
+    try {
+      const citiesResponse = await fetch(url).then(response => {
+        if (!response.ok) {
+          throw new Error(`status: ${response.status} ${response.statusText}`)
+        }
+        return response.json() as Promise<CityResponse>
+      })
+
+      return citiesResponse.map(cityResponse => new City(cityResponse))
+    } catch (error) {
+      console.warn('CityService->findCity:', error)
+      throw new Error('Error occurred')
+    }
+  }
 }
