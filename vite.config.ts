@@ -1,15 +1,15 @@
-import { fileURLToPath, URL } from 'node:url';
+import { fileURLToPath, URL } from 'node:url'
 
-import { defineConfig, loadEnv } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js';
+import { defineConfig, loadEnv } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import cssInjectedByJsPlugin from 'vite-plugin-css-injected-by-js'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd());
+  const env = loadEnv(mode, process.cwd())
 
   if (!env.VITE_WEATHER_SERVICE_API_KEY) {
-    throw new Error('Define Weather Service Api key in .env file!');
+    throw new Error('Define Weather Service Api key in .env file!')
   }
 
   return {
@@ -42,5 +42,5 @@ export default defineConfig(({ mode }) => {
         }
       }
     }
-  };
-});
+  }
+})

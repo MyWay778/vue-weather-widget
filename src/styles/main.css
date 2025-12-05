@@ -15,6 +15,9 @@
   --white: #fff;
   --active: #5faffa;
 
+  /* Semantic colors*/
+  --background-color: var(--white);
+
   /* Fonts */
   --font-size: 16px;
   --font-family: 'Open Sans', sans-serif;
@@ -25,6 +28,7 @@
 
   /* Others */
   --border-radius: 10px;
+  --padding: 20px;
 }
 
 #root {

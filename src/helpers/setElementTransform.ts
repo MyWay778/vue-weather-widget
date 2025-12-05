@@ -1,15 +1,15 @@
 export default function setElementTransform(element: HTMLElement, { x = 0, y = 0, scale = 0 }): void {
-  let transform = '';
+  let transform = ''
 
   if (x || y) {
-    transform = `translate(${x}px, ${y}px)`;
+    transform = `translate(${x}px, ${y}px)`
   }
 
   if (scale) {
-    transform += ` scale(${scale})`;
+    transform += ` scale(${scale})`
   }
 
-  if (!transform) return;
+  if (!transform) return
 
-  element.style.transform = transform;
+  element.style.transform = transform
 }
